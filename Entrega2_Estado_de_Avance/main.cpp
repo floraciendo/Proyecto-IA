@@ -1,11 +1,8 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <vector>
 
 #include "main.hpp"
-
-using namespace std;
 
 // Revisar bien la sobreposición
 // Siguiendo la lógica de Bottom Left
