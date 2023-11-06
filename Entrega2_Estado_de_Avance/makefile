@@ -1,10 +1,12 @@
+INSTANCIA = BENG01
+
 all: exec run
 
-exec: main.cpp
-	@g++ main.cpp -o exec
+exec: 2dspp.cpp
+	@g++ 2dspp.cpp -o exec
 
 run:
-	@./exec
+	@./exec $(INSTANCIA).txt > $(INSTANCIA).out
 
 clean:
-	@rm -f exec
+	@rm -f exec $(INSTANCIA).out

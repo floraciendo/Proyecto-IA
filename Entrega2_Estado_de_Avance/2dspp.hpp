@@ -26,5 +26,6 @@ public:
 	int getHeight();
 	int evaluationFunction();
 	void addRectangleGreedy(Rectangle rectangle);
+	bool canBePlaced(Rectangle rectangle, int posX, int posY, int orientation);
 	void printOutput();
 };
