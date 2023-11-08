@@ -1,0 +1,7 @@
+Feedback presentación Estado de Avance
+- Definir un movimiento válido a utilizar en HCAM, como recolocación.
+- Definir el uso de las semillas en la generación del algoritmo greedy, que puede ser 
+  con un ordenamiento anterior al uso del algoritmo para revisar de forma experimental
+  los resultados de estos cambios/modificaciones.
+- Extra: Muy buen código, pero recomiendo revisar el posible error mencionado en cierto 
+  caso con el cumplimiento de las restricciones.
