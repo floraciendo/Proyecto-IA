@@ -12,7 +12,7 @@
 \begin{document}
 \title{Inteligencia Artificial \\ \begin{Large}Estado del Arte: 2D Strip Packing Problem\end{Large}}
 \author{Florencia Ram\'irez Sancristoful}
-\date{27 de septiembre de 2023}
+\date{20 de noviembre de 2023}
 \maketitle
 
 
@@ -58,9 +58,9 @@ Los m\'etodos exactos resuelven este problema encontrando la soluci\'on \'optima
 
 \subsection{Variables, restricciones y objetivos}
 
-Antes de definir las variables de este problema, es necesario identificar las constantes ya existentes. Las cuales corresponden a la cantidad de elementos rectangulares a posicionar, $N$, el ancho definido de la regi\'on, $W$, y las dimensiones de cada elemento $i$, $w_{i}*h_{i}$.
+Antes de definir las variables de este problema, es necesario identificar las constantes ya existentes. Las cuales corresponden a la cantidad de elementos rectangulares a posicionar, el ancho definido de la regi\'on y las dimensiones de cada elemento.
 
-Una vez identificadas estas constantes, se pueden definir tres variables para la resoluc\'on de este problema. Dos variables correspondientes a la posici\'on que tomar\'a el elemento $i$, $x_{i}$ e $y_{i}$, y una variable correspondiente al indicador de rotaci\'on del elemento $i$, $r_{i}$. Adem\'as, estas variables se ven restringidas por las siguientes condiciones:
+Una vez identificadas estas constantes, se pueden definir tres variables para la resoluc\'on de este problema. Dos variables correspondientes a la posici\'on que tomar\'a cada elemento, tomando como referencia un plano cartesiano, y una variable correspondiente al indicador de rotaci\'on de cada elemento. Adem\'as, estas variables se ven restringidas por las siguientes condiciones:
 
 \begin{enumerate}
     \item Cada elemento debe estar posicionado dentro de los m\'argenes de la regi\'on.
@@ -95,7 +95,7 @@ Los m\'etodos exactos garantizan que la soluci\'on entregada es la \'optima y no
 
 La mayor\'ia de estos m\'etodos se basan en la estrategia \emph{Branch and Bound}, una forma de \emph{backtracking} que genera un \'arbol con todas las posibles soluciones y corta las ramas que dejan de ser \'optimas. Bas\'andose en una adaptaci\'on para el \emph{Contiguous Bin Packing Problem} (CBP) y modelos matem\'aticos propuestos~\cite{martello2003exact}, surgen los algoritmos \emph{STAIRCASE} y \emph{G-STAIRCASE}~\cite{kenmochi2009exact} que utilizan esta metodolog\'ia.
 
-El primero obtiene un l\'imite inferior correspondiente a una altura $H$ propuesta, luego agrega elementos con dimensiones $1 * 1$ hasta obtener una instancia de \emph{Perfect Packing} (PP), casos perfectos en los que no existen \'areas desperdiciadas, luego revisa si la instancia generada puede ser resuelta con una estrategia de posicionamiento en escalera considerando instancias PP. Si encuentra una soluci\'on v\'alida, termina la ejecuci\'on y $H$ corresponde a la soluci\'on \'optima, en caso contrario, incrementa en valor de $H$ en uno y repite este proceso. El segundo algoritmo tambi\'en obtiene un l\'imite inferior correspondiente a la altura $H$, pero no agrega elementos extra, luego revisa si puede ser resuelto utilizando la misma estrategia, este caso permite los espacios vac\'ios para generar en la regi\'on bajo la escalera y, al igual que el anterior, si encuentra una soluci\'on v\'alida termina, sino aumenta $H$ en uno.
+El primero obtiene un l\'imite inferior correspondiente a una altura $H$ propuesta, luego agrega elementos con dimensiones $1 \cdot 1$ hasta obtener una instancia de \emph{Perfect Packing} (PP), casos perfectos en los que no existen \'areas desperdiciadas, luego revisa si la instancia generada puede ser resuelta con una estrategia de posicionamiento en escalera considerando instancias PP. Si encuentra una soluci\'on v\'alida, termina la ejecuci\'on y $H$ corresponde a la soluci\'on \'optima, en caso contrario, incrementa en valor de $H$ en uno y repite este proceso. El segundo algoritmo tambi\'en obtiene un l\'imite inferior correspondiente a la altura $H$, pero no agrega elementos extra, luego revisa si puede ser resuelto utilizando la misma estrategia, este caso permite los espacios vac\'ios para generar en la regi\'on bajo la escalera y, al igual que el anterior, si encuentra una soluci\'on v\'alida termina, sino aumenta $H$ en uno.
 
 Ambos algoritmos logran resolver la mayor\'ia de las instancias de prueba con un m\'aximo de 200 rec\'angulos en menos de una hora, y concluyen que estos algoritmos son una alternativa a los propuestos anteriormente, considerando que la mayor\'ia de los algoritmos existentes hasta ese momentos estaban enfocados en la variante OF.
 
@@ -117,14 +117,14 @@ GA utiliza una analog\'ia de la selecci\'on natural, a todas las posibles soluci
 
 \subsection{Comparaciones entre m\'etodos}
 
-Los resultados computacionales de los m\'etodos exactos \emph{STAIRCASE} y \emph{G-STAIRCASE}~\cite{kenmochi2009exact} en el cuadro~\ref{tab:comparacion_beng10} muestran que ambos algoritmos pueden resolver instancias de hasta 200 elementos, y la soluci\'on \'optima entregada es igual, o muy cercana, al l\'imite inferior calculado, pero entre ambos algoritmos \emph{STAIRCASE} obtiene mejores resultados agregando los elementos indicados por la columna $1*1$, destancando los menores tiempos de ejecuci\'on.
+Los resultados computacionales de los m\'etodos exactos \emph{STAIRCASE} y \emph{G-STAIRCASE}~\cite{kenmochi2009exact} en el cuadro~\ref{tab:comparacion_beng10} muestran que ambos algoritmos pueden resolver instancias de hasta 200 elementos, y la soluci\'on \'optima entregada es igual, o muy cercana, al l\'imite inferior calculado, pero entre ambos algoritmos \emph{STAIRCASE} obtiene mejores resultados agregando los elementos indicados por la columna $1 \cdot 1$, destancando los menores tiempos de ejecuci\'on.
 
 \renewcommand{\arraystretch}{1.1}
 \begin{table}[H]
     \centering
     \begin{tabular}{|l|lllll|rr|}
     \hline
-    Instancia & \multicolumn{1}{l}{$N$} & \multicolumn{1}{l}{$W$} & \multicolumn{1}{l}{$LW$} & \multicolumn{1}{l}{$H$} & \multicolumn{1}{l|}{$1*1$} & \multicolumn{1}{l}{\emph{STAIRCASE}} & \multicolumn{1}{l|}{\emph{G-STAIRCASE}} \\ \hline
+    Instancia & \multicolumn{1}{l}{$N$} & \multicolumn{1}{l}{$W$} & \multicolumn{1}{l}{$LW$} & \multicolumn{1}{l}{$H$} & \multicolumn{1}{l|}{$1 \cdot 1$} & \multicolumn{1}{l}{\emph{STAIRCASE}} & \multicolumn{1}{l|}{\emph{G-STAIRCASE}} \\ \hline
     beng01 & 20 & 25 & 30 & 30 & 9 & \textbf{0.08} & \textbf{0.08} \\ \hline
     beng02 & 40 & 25 & 57 & 57 & 5 & 0.12 & \textbf{0.10} \\ \hline
     beng03 & 60 & 25 & 84 & 84 & 10 & \textbf{0.10} & \textbf{0.10} \\ \hline
@@ -190,10 +190,10 @@ La definici\'on de este problema define tres constantes, las cuales representan 
     & W = \text{ancho predefinido de la regi\'on}\ &
 \end{flalign*}
 
-La segunda constante corresponde a la cantidad total de elementos rectangulares que se deben ajustar en dicha regi\'on de ancho $W$, este valor tambi\'en debe ser un n\'umero entero mayor que 0, al igual que el ancho, por la definici\'on de cantidad, y la \'ultima constante corresponde a las dimensiones de cada uno de estos $N$ elementos rectangulares, estas dimensiones est\'an representadas de la forma $ancho * alto$.
+La segunda constante corresponde a la cantidad total de elementos rectangulares que se deben ajustar en dicha regi\'on de ancho $W$, este valor tambi\'en debe ser un n\'umero entero mayor que 0, al igual que el ancho, por la definici\'on de cantidad, y la \'ultima constante corresponde a las dimensiones de cada uno de estos $N$ elementos rectangulares, estas dimensiones est\'an representadas de la forma $ancho \cdot alto$.
  \begin{flalign*}
     & N = \text{cantidad de elementos rectangulares}\ & \\
-    & w_{i} * h_{i} = \text{dimensiones del elemento}\ i, \hspace{0.1cm} \forall i \in [1,N]\ &
+    & w_{i} \cdot h_{i} = \text{dimensiones del elemento}\ i, \hspace{0.1cm} \forall i \in [1,N]\ &
 \end{flalign*}
 
 \subsection{Variables}
@@ -216,7 +216,7 @@ La \'ultima variable de decisi\'on corresponde una variable binaria representand
 
 Su objetivo principal es minimizar el \'area $A$ sin utilizar de la regi\'on, lo cual puede ser logrado minimizando la altura $H$ de dicha regi\'on.
 \begin{flalign*}
-    & \min H = \min \{ \max_{i \in [1,N]} \{ y_{i} + h{_i} + r_{i} * (w_{i} - h_{i}) \} \} &
+    & \min H = \min \{ \max_{i \in [1,N]} \{ y_{i} + h{_i} + r_{i} \cdot (w_{i} - h_{i}) \} \} &
 \end{flalign*}
 
 \subsection{Restricciones}
@@ -226,7 +226,7 @@ Esta variante define algunas condiciones que deben cumplir estas variables de de
 \vspace{0.2cm}
 \textbf{Restricci\'on 1:} Los elementos no pueden superar el ancho $W$ de la regi\'on.
 \begin{align}
-    & x_{i} + w_{i} + r_{i} * (h_{i} - w_{i}) \leq W, \hspace{0.1cm} \forall i \in [1,N] &
+    & x_{i} + w_{i} + r_{i} \cdot (h_{i} - w_{i}) \leq W, \hspace{0.1cm} \forall i \in [1,N] &
 \end{align}
 
 La restricci\'on considera la posible rotaci\'on del elemento $i$, si el \'indice de rotaci\'on es 0, el elemento $i$ utiliza el espacio entre los puntos $x_{i}$ y $x_{i} + w_{i}$ en el eje $x$ del plano cartesiano. En cambio, si el \'indice es 1, significando que el elemento $i$ es rotado en 90\textdegree, utilizar\'a el espacio entre los puntos $x_{i}$ y $x_{i} + h_{i}$.
@@ -234,8 +234,8 @@ La restricci\'on considera la posible rotaci\'on del elemento $i$, si el \'indic
 \vspace{0.2cm}
 \textbf{Restricci\'on 2:} Los elementos no pueden solaparse entre s\'i.
 \begin{align}
-    & x_{i} + w_{i} + r_{i} * (h_{i} - w_{i}) \leq x_{j} \vee x_{j} + w_{j} + r_{j} * (h_{j} - w_{j}) \leq x_{i} \vee & \\ \nonumber
-    & y_{i} + h_{i} + r_{i} * (w_{i} - h_{i}) \leq y_{j} \vee y_{j} + h_{j} + r_{j} * (w_{j} - h_{ij}) \leq y_{i},\hspace{0.1cm} \forall i,j \in [1,N], i \neq j &
+    & x_{i} + w_{i} + r_{i} \cdot (h_{i} - w_{i}) \leq x_{j} \vee x_{j} + w_{j} + r_{j} \cdot (h_{j} - w_{j}) \leq x_{i} \vee & \\ \nonumber
+    & y_{i} + h_{i} + r_{i} \cdot (w_{i} - h_{i}) \leq y_{j} \vee y_{j} + h_{j} + r_{j} \cdot (w_{j} - h_{ij}) \leq y_{i},\hspace{0.1cm} \forall i,j \in [1,N], i \neq j &
 \end{align}
 
 Esta restricci\'on aplica el mismo principio que la restricci\'on anterior. Si se tienen dos elementos $i, j$ existen cuatro posibles casos. El elemento $i$ puede estar a la izquierda, derecha, debajo o sobre el elemento $j$. Mientras se cumpla al menos uno de los posibles casos, debido al operador l\'ogico $\vee$, significa que los elementos no se solapan.
@@ -247,6 +247,22 @@ Esta restricci\'on aplica el mismo principio que la restricci\'on anterior. Si s
 \end{align}
 
 Usando un plano cartesiano como referencia, se considera que el ancho de la regi\'on va desde el punto (0, 0) al punto ($W$, 0) y si alguna de las variables de posici\'on de los elementos tiene un valor negativo, significa que fue colocado fuera de los m\'argenes establecidos de la regi\'on. Por la definici\'on de las constantes, las dimensiones de los elementos corresponden a un n\'umero entero, no considera decimales. Por \'ultimo, las variables del \'indice de rotaci\'on de los objetos corresponde a una variable binaria, lo que significa que sus \'unicos valores posibles son 0 o 1.
+
+\section{Representaci\'on}
+
+Representaci\'on usada
+
+\section{Descripci\'on del Algoritmo}
+
+El algoritmo es
+
+\section{Experimentos}
+
+Se realizaron
+
+\section{Resultados}
+
+Los resultados
 
 \section{Conclusiones}
 
