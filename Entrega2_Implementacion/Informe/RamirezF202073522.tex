@@ -10,7 +10,7 @@
 \usepackage{float}
 
 \begin{document}
-\title{Inteligencia Artificial \\ \begin{Large}Estado del Arte: 2D Strip Packing Problem\end{Large}}
+\title{Inteligencia Artificial \\ \begin{Large}Informe Final: Problema 2D Strip Packing\end{Large}}
 \author{Florencia Ram\'irez Sancristoful}
 \date{20 de noviembre de 2023}
 \maketitle
@@ -20,25 +20,33 @@
 \section*{Evaluaci\'on}
 
 \begin{tabular}{ll}
-Resumen (5\%): & \underline{\hspace{2cm}} \\
-Introducci\'on (5\%):  & \underline{\hspace{2cm}} \\
-Definici\'on del Problema (10\%):  & \underline{\hspace{2cm}} \\
-Estado del Arte (35\%):  & \underline{\hspace{2cm}} \\
-Modelo Matem\'atico (20\%): &  \underline{\hspace{2cm}}\\
+C\'odigo Fuente (20\%): &  \underline{\hspace{2cm}}\\
+Representaci\'on (15\%):  & \underline{\hspace{2cm}} \\
+Descripci\'on del algoritmo (20\%):  & \underline{\hspace{2cm}} \\
+Experimentos (10\%):  & \underline{\hspace{2cm}} \\
+Resultados (10\%):  & \underline{\hspace{2cm}} \\
 Conclusiones (20\%): &  \underline{\hspace{2cm}}\\
 Bibliograf\'ia (5\%): & \underline{\hspace{2cm}}\\
  &  \\
-\textbf{Nota Final (100\%)}:   & \underline{\hspace{2cm}}
+\textbf{Nota Final (100)}:   & \underline{\hspace{2cm}}
 \end{tabular}
 %---------------------------------------------------------------------------%
-\vspace{2cm}
+
+% Esto supongo que lo comento despues
+\vspace{0.6cm}
 
 
 \begin{abstract}
+    Resumen del informe en no m\'as de 10 l\'ineas, donde se sintetice el problema que se trata, el acercamiento propuesto y sirva para que un lector no involucrado comprenda el objetivo del documento.
+    \vspace{0.2cm}    
     El \emph{2D Strip Packing Problem} es un problema de optimizaci\'on en el cual un conjunto de elementos deben ser posicionados en una regi\'on definida cumpliendo ciertas condiciones con el objetivo de minimizar el espacio necesario para ajustar estos elementos. Se han propuesto una gran variedad de m\'etodos y modelos para la resoluci\'on de este problema y variantes existentes, se presentan los m\'etodos m\'as relevantes y conocidos para luego realizar un an\'alisis comparativo entre ellos con un enfoque la variante con rotaciones y sin cortes en guillotina.
+
 \end{abstract}
 
 \section{Introducci\'on}
+
+Una explicaci\'on breve del contenido del informe, es decir, detalla: Prop\'osito, Estructura del Documento, Descripci\'on (muy breve) del Problema y Motivaci\'on e ideas fundamentales de la propuesta de soluci\'on. Incluye la descripci\'on del contenido del Informe secci\'on por secci\'on.
+\vspace{0.2cm}
 
 El \emph{2D Strip Packing Problem} (2DPP) es un problema de gran inter\'es estudiado por diversas industrias, derivado de los problemas de empaquetamiento y est\'a enfocado en la optimizaci\'on del espacio. Este problema consiste en ordenar, sin solapar, un conjunto de elementos rectangulares, cada uno con dimensiones conocidas, en una regi\'on de ancho fijo pero alto infinito, teniendo como objetivo final minimizar el \'area inutilizada de dicha regi\'on.
 
@@ -49,6 +57,10 @@ Dado que el 2DSPP tiene una gran cantidad de aplicaciones pr\'acticas reales en 
 El resto de las secciones de este documento est\'an estructuradas de la siguiente manera, en la secci\'on 2 se explican los conceptos fundamentales del 2DSPP. En la secci\'on 3 se presenta el Estado del Arte del problema. En la secci\'on 4 se analizan algunos modelos matem\'aticos que entregan una soluci\'on al problema. Finalmente, en la secci\'on 5 se presentan las conclusiones.
 
 \section{Definici\'on del Problema}
+
+Explicaci\'on del problema que se va a estudiar, en qu\'e consiste, cu\'ales son sus variables , restricciones y objetivo(s) de manera general (en palabras, no una formulaci\'on matem\'atica). Debe entenderse claramente el problema y qu\'e busca resolver. Explicar si existen problemas relacionados. Destacar, si existen, las variantes m\'as conocidas.\\
+Redactar en tercera persona, sin faltas de ortograf\'ia y referenciar correctamente sus fuentes mediante el comando  \verb+\cite{ }+. Por ejemplo, para hacer referencia al art\'iculo de algoritmos h\'ibridos para problemas de satisfacci\'on de restricciones~\cite{lodi2002two}.
+\vspace{0.2cm}
 
 El \emph{2D Strip Packing Problem} es un problema combinatorial de optimizaci\'on derivado de los problemas de empaquetamiento~\cite{oliveira2016survey}, en el cual se deben ajustar una serie de elementos rectangulares, con un ancho $w$ y alto $h$ definido, en una regi\'on rectangular de ancho $W$ y alto infinito, minimizando el \'area total inutilizada de la regi\'on o minimizando la altura total de la regi\'on. Este es un problema NP-Complejo conocido con bastantes aplicaciones en diversas industrias, incluyendo industrias madereras, vidrieras, metal\'urgicas, textiles, entre otras~\cite{lodi2002two}~\cite{vasilyev2023generalized}.
 
@@ -82,6 +94,9 @@ Tambi\'en, se distinguen dos categor\'ias respecto al conocimiento previo sobre 
 Dos de los problemas m\'as similares son el \emph{Rectangular Packing Problem} y el \emph{Bin Packing Problem}. En el primero se deben ordenar una serie de rect\'angulos en una regi\'on de ancho y largo fijo con el objetivo de maximizar el \'area de estos rect\'angulos ajustados~\cite{chen2007two}. Por otro lado, en el segundo se debe ajustar una serie de elementos en una cantidad finita de contenedores de ancho y alto fijo, tiene como objetivo minimizar la cantidad de contenedores utilizados~\cite{lodi2002two}.
 
 \section{Estado del Arte}
+
+La informaci\'on que describen en este punto se basa en los estudios realizados con antelaci\'on respecto al tema. Lo m\'as importante que se ha hecho hasta ahora con relaci\'on al problema. Deber\'ia responder preguntas como las siguientes: ?`cu\'ando surge?, ?`qu\'e m\'etodos se han usado para resolverlo?, ?`cu\'ales son los mejores algoritmos que se han creado hasta la fecha?, ?`qu\'e representaciones han tenido los mejores resultados?, ?`cu\'al es la tendencia actual para resolver el problema?, tipos de movimientos, heur\'isticas, m\'etodos completos, tendencias, etc... Puede incluir gr\'aficos comparativos o explicativos.
+\vspace{0.2cm}
 
 El \emph{2D Strip Packing Problem} (2DSPP) es uno de los problemas de empaquetamiento m\'as simples que surge de la necesidad de reducir los costos operacionales de las industrias transformadoras de materias primas~\cite{junior2022rectangular}, por lo cual ha sido estudiado intensamente y se han propuesto diversos m\'etodos para su resoluci\'on, los cuales pueden ser divididos en tres categor\'ias, m\'etodos exactos, heur\'isticos e h\'ibridos.
 
@@ -181,6 +196,9 @@ Al comparar el algoritmo DHA~\cite{he2013heuristics} con otros m\'etodos h\'ibri
 
 \section{Modelo Matem\'atico}
 
+Uno o m\'as modelos matem\'aticos para el problema, idealmente indicando el espacio de b\'usqueda para cada uno. Cada modelo debe estar correctamente referenciado, adem\'as no debe ser una imagen extraida. Tambi\'en deben explicarse en detalle cada una de las partes, mostrando claramente la funci\'on a maximizar/minimizar, variables y restricciones. Tanto las f\'ormulas como las explicaciones deben ser consistentes.
+\vspace{0.2cm}
+
 Los modelos presentados en la literatura~\cite{he2013heuristics}~\cite{hopper2001empirical}~\cite{kenmochi2009exact}~\cite{oliveira2016survey} para la resoluci\'on de las diversas variantes del 2DSPP tienen en com\'un algunos de los aspectos b\'asicos m\'as relevantes de este problema, por lo cual, en base a estos modelos se combinan y propone el siguiente modelo matem\'atico para la resoluci\'on de la variante RF, que permite rotaciones y posiciones libres.
 
 \subsection{Constantes}
@@ -249,22 +267,25 @@ Esta restricci\'on aplica el mismo principio que la restricci\'on anterior. Si s
 Usando un plano cartesiano como referencia, se considera que el ancho de la regi\'on va desde el punto (0, 0) al punto ($W$, 0) y si alguna de las variables de posici\'on de los elementos tiene un valor negativo, significa que fue colocado fuera de los m\'argenes establecidos de la regi\'on. Por la definici\'on de las constantes, las dimensiones de los elementos corresponden a un n\'umero entero, no considera decimales. Por \'ultimo, las variables del \'indice de rotaci\'on de los objetos corresponde a una variable binaria, lo que significa que sus \'unicos valores posibles son 0 o 1.
 
 \section{Representaci\'on}
-
-Representaci\'on usada
+Representaci\'on de \textbf{soluciones} (arreglos, matrices, etc.). En caso de t\'ecnicas completas indicar variables y dominios. Incluir justificaci\'on y ejemplos para mayor claridad.
 
 \section{Descripci\'on del Algoritmo}
 
-El algoritmo es
+C\'omo fue implementada la soluci\'on. Interesa la implementaci\'on particular m\'as que el algoritmo gen\'erico, es decir, si se tiene que implementar SA, lo que se espera es que se explique en pseudoc\'odigo la estructura general y en p\'arrafos explicativos c\'omo fue implementada cada parte para su problema particular. Si se utilizan operadores/movimientos se debe justificar por qu\'e se utilizaron dichos operadores/movimientos. En caso de una t\'ecnica completa, describir detalles relevantes del proceso, si se utiliza recursi\'on o no, explicar c\'omo se van construyendo soluciones, cu\'ando se revisan restricciones, c\'omo se registran conflictos, etc. En este punto no se espera que se incluya c\'odigo, eso va aparte.
 
 \section{Experimentos}
 
-Se realizaron
+Se necesita saber c\'omo experimentaron, c\'omo definieron par\'ametros, 
+c\'omo los fueron modificando, cu\'ales problemas/instancias se estudiaron y por qu\'e, etc. Recuerde que las t\'ecnicas completas son deterministas y las t\'ecnicas incompletas son estoc\'asticas.
 
 \section{Resultados}
 
-Los resultados
+Qu\'e fue lo que se logr\'o con la experimentaci\'on, incluir tablas y gr\'aficos (lo m\'as explicativos posible). Los resultados deben ser comentados y justificados en detalle en esta secci\'on.
 
 \section{Conclusiones}
+
+Conclusiones RELEVANTES del estudio realizado. Incluir conclusiones acerca de la adecuaci\'on de la propuesta de soluci\'on al problema que se busca resolver. Listar y analizar ventajas y desventajas de la propuesta en base a los resultados obtenidos y comportamiento de la propuesta en diferentes escenarios (problemas/instancias/par\'ametros). Incluir trabajo futuro en base a las conclusiones.
+\vspace{0.2cm}
 
 El \emph{2D Strip Packing Problem} es un problema con diversas aplicaciones pr\'acticas reales, por lo cual es importante buscar soluciones buenas y eficientes para instancias de mayor tama\~no y complejidad, ya que estas son las que m\'as se asemejan a sus aplicaciones reales. Existen diversas t\'ecnicas enfocadas en las distintas variantes que existen, las restricciones que debe cumplir cada uno de estos m\'etodos depende de la variante de estudio, considerando algunas m\'as sencillas que otras. Los m\'etodos heur\'isticos e h\'ibridos son los m\'as favorables, dado que logran resolver las instancias m\'as parecidas a la realidad, pero a\'un no pueden obtener la soluci\'on \'optima para estas instancias m\'as complejas. Las investigaciones recientes respecto al problema est\'an enfocadas en estos m\'etodos y uno de los posibles trabajos a realizar en un futuro es crear nuevos m\'etodos h\'ibridos con las nuevas t\'ecnicas heur\'isticas m\'as competitivas hasta la fecha. 
 
