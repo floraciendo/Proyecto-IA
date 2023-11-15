@@ -16,23 +16,27 @@ Especificación de archivos:
         Diapositivas para la presentación del lunes 06 de noviembre de 2023.
 
 ☆.。.:*・°☆.。.:*・°☆.。.:*・°☆.。.:*・°☆.。.:*・°☆
-
+    
 Instrucciones de compilación:
-    Se debe modificar el archivo makefile con el nombre de la instancia, sin incluir ".txt":
-        INSTANCIA = <nombre_de_la_instancia>
-    Luego, en la terminal de linux (WSL), ejecutar:
+    Usando los valores predeterminados de instancia y semilla, en la terminal de linux (WSL) se ejecuta:
         $ make
-    El cual ejecutará el archivo makefile, escribiendo los resultados en el archivo <nombre_de_la_instancia>.out,
-    y finalmente, en caso de querer borrar el ejecutable y el output:
-        $ make clean
+    El cual ejecutará el archivo makefile, escribiendo los resultados en el archivo <instancia>_<semilla>.out. En caso de 
+    querer borrar el ejecutable y el output se ejecuta:
+        $ make clean 
+    Si se quieren usar otra instancia y/o semilla, se pueden modificar estas variables en el archivo makefile o se puede
+    hacer directamente en la línea de comando ejecutando:
+        $ make INSTANCIA="<instancia_nueva>" SEMILLA="<semilla_nueva>"
+    Lo cual reemplaza los valores predeterminados, si se quiere cambiar un solo un valor se escribe solamente esa variable,
+    por último, si se quiere borrar el ejecutable y output de estos casos, también se deben entregar los valores cambiados:
+        $ make clean INSTANCIA="<instancia_nueva>" SEMILLA="<semilla_nueva>"
 
 ☆.。.:*・°☆.。.:*・°☆.。.:*・°☆.。.:*・°☆.。.:*・°☆
 
 Comentarios extras:
-    - En caso de tener las instancias de prueba en carpetas en el mismo directorio, se debe modificar el archivo makefile
-      para incluir las carpetas correspondientes.
-    - Al no estar implementada la parte de Hill Climbing Alguna Mejora, no se utiliza una semilla, por lo que no se agrega
-      al nombre del archivo del output.
+    - Se asume que la instancia de prueba se encuentra en el mismo directorio.
+	- En caso de tener las instancias de prueba en carpetas en el mismo directorio, se debe modificar el archivo makefile 
+      para incluir las carpetas correspondientes. Esto también haría que el output se escriba en dicha carpeta.
+    - No está implementado Hill Climbing Alguna Mejora.
     - Falta una revisión mejor de la funcion canBePlaced() y addRectangleGreedy(), ya que en las instancias conocidas 
       NGCUT07 y NGCUT10 se encuentra una altura menor a la óptima.
     - Se deberán hacer las modificaciones necesarias para implementar el movimiento y generar el vecindario.

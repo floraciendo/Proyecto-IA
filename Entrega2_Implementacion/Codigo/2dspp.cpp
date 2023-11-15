@@ -1,6 +1,9 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <random>
+#include <algorithm>
+#include <cstdlib>
 // #include <chrono>
 
 #include "2dspp.hpp"
@@ -112,8 +115,9 @@ int main(int argc, char* argv[]) {
 	// Tiempo cuando parte la ejecución del programa
 	// auto startTime = chrono::high_resolution_clock::now();
 
-	// Nombre del archivo de la instancia
+	// Nombre de la instancia y semilla
 	string instance = argv[1];
+	int seed = atoi(argv[2]);
 
 	// Lectura del archivo
 	ifstream input(instance);
@@ -131,15 +135,26 @@ int main(int argc, char* argv[]) {
 	// Crea la región con el ancho dado
 	Strip strip(w);
 
-	// Agrega todos los rectángulos a la región
+	// Crea un vector y agregar todos los rectángulos
+	vector<Rectangle> rectangles;
+
 	for (int i = 0; i < n; i++) {
 		Rectangle rectangle;
 		input >> rectangle.id >> rectangle.width >> rectangle.height;
-		strip.addRectangleGreedy(rectangle);
+		rectangles.push_back(rectangle);
 	}
 
 	// Cierra el archivo
 	input.close();
+
+	// Agrega los rectángulos en un orden aleatorio generado por la semilla
+	shuffle(rectangles.begin(), rectangles.end(), default_random_engine(seed));
+
+	for (const Rectangle &r : rectangles) {
+		strip.addRectangleGreedy(r);
+	}
+
+	// Muestra la solución encontrada
 	strip.printOutput();
 
 	// auto stopTime = chrono::high_resolution_clock::now();
