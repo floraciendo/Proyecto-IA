@@ -11,13 +11,16 @@
 bool Strip::canBePlaced(Rectangle rectangle, int posX, int posY, int orientation) {
 	for (const Rectangle &r : rectangles) {
 		// Revisa por el eje x
-		bool overlapX = (posX + rectangle.width + orientation * (rectangle.height - rectangle.width) <= r.position.x) || 
+		bool overlapX = (posX + rectangle.width + orientation * (rectangle.height - rectangle.width) < r.position.x) || 
 						(r.position.x + r.width + r.position.r * (r.height - r.width) > posX);
 		// Revisa por el eje y
-		bool overlapY = (posY + rectangle.height + orientation * (rectangle.width - rectangle.height) <= r.position.y) || 
+		bool overlapY = (posY + rectangle.height + orientation * (rectangle.width - rectangle.height) < r.position.y) || 
 						(r.position.y + r.height + r.position.r * (r.width - r.height) > posY);
 		
-		if (!(overlapX || overlapY)) {
+		if (overlapX && overlapY) {
+			if (rectangle.id == 1) {
+				cout << "No se puede posicionar el rectángulo n°8 en la posición (" << posX << "," << posY << ")" << endl;
+			}
 			return false;
 		}
 	}
@@ -55,10 +58,16 @@ void Strip::addRectangleGreedy(Rectangle rectangle) {
 		// Asumiendo que todas las instancias van a ser factibles, lo coloca sin rotar
 		for (int x = 0; x <= fixedWidth - rectangle.width; x++) {
 			int y = 0;
+			if (x == 9) {
+				cout << "Llega al 9" << endl;
+			}
 
 			for (const Rectangle &r : rectangles) {
 				if (x < r.position.x + r.width + r.position.r * (r.height - r.width) && x + rectangle.width > r.position.x && rectangle.width <= fixedWidth - x) {
 					y = max(y, r.position.y + r.height + r.position.r * (r.width - r.height));
+					if (x == 9) {
+						cout << "maximo "<< max(y, r.position.y + r.height + r.position.r * (r.width - r.height)) << endl;
+					}
 				}
 			}
 
@@ -66,6 +75,9 @@ void Strip::addRectangleGreedy(Rectangle rectangle) {
 			if (y < bestY && canBePlaced(rectangle, x, y, 0)) {
 				bestY = y;
 				bestX = x;
+				if (rectangle.id == 1) {
+					cout << "Nueva mejor posición en (" << bestX << "," << bestY << ")" << endl;
+				}
 			}
 		}
 
@@ -151,6 +163,7 @@ int main(int argc, char* argv[]) {
 	shuffle(rectangles.begin(), rectangles.end(), default_random_engine(seed));
 
 	for (const Rectangle &r : rectangles) {
+		cout << "Agregando el rectángulo n°" << r.id << endl;
 		strip.addRectangleGreedy(r);
 	}
 
