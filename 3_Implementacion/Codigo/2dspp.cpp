@@ -18,9 +18,6 @@ bool Strip::canBePlaced(Rectangle rectangle, int posX, int posY, int orientation
 						(r.position.y + r.height + r.position.r * (r.width - r.height) > posY);
 		
 		if (overlapX && overlapY) {
-			if (rectangle.id == 1) {
-				cout << "No se puede posicionar el rectángulo n°8 en la posición (" << posX << "," << posY << ")" << endl;
-			}
 			return false;
 		}
 	}
@@ -58,16 +55,10 @@ void Strip::addRectangleGreedy(Rectangle rectangle) {
 		// Asumiendo que todas las instancias van a ser factibles, lo coloca sin rotar
 		for (int x = 0; x <= fixedWidth - rectangle.width; x++) {
 			int y = 0;
-			if (x == 9) {
-				cout << "Llega al 9" << endl;
-			}
 
 			for (const Rectangle &r : rectangles) {
 				if (x < r.position.x + r.width + r.position.r * (r.height - r.width) && x + rectangle.width > r.position.x && rectangle.width <= fixedWidth - x) {
 					y = max(y, r.position.y + r.height + r.position.r * (r.width - r.height));
-					if (x == 9) {
-						cout << "maximo "<< max(y, r.position.y + r.height + r.position.r * (r.width - r.height)) << endl;
-					}
 				}
 			}
 
@@ -75,9 +66,6 @@ void Strip::addRectangleGreedy(Rectangle rectangle) {
 			if (y < bestY && canBePlaced(rectangle, x, y, 0)) {
 				bestY = y;
 				bestX = x;
-				if (rectangle.id == 1) {
-					cout << "Nueva mejor posición en (" << bestX << "," << bestY << ")" << endl;
-				}
 			}
 		}
 
@@ -111,14 +99,29 @@ int Strip::evaluationFunction() {
 	return totalArea - totalRectangleArea;
 }
 
+vector<Rectangle> Strip::sortRectangles() {
+	// Crea un vector nuevo
+	vector<Rectangle> sortedRectangles = rectangles;
+
+	// Utiliza una función lambda para oordenarlos de acuerdo a su id
+	sort(sortedRectangles.begin(), sortedRectangles.end(), [](const Rectangle& a, const Rectangle& b) {
+		return a.id < b.id;
+	});
+
+	return sortedRectangles;
+}
+
 void Strip::printOutput() {
 	// Calcula e imprime la altura total y el área sin usar
 	int currentHeight = getHeight();
 	int totalUnsedArea = evaluationFunction();
 	cout << currentHeight << "\n" << totalUnsedArea << endl;
 
+	// Obtiene los rectangulos ordenados por su id
+	vector<Rectangle> sortedRectangles = sortRectangles();
+
 	// Imprime las posiciones e índice de rotación de cada uno de los rectángulos
-	for (const Rectangle &rectangle : rectangles) {
+	for (const Rectangle &rectangle : sortedRectangles) {
 		cout << rectangle.position.x << " " << rectangle.position.y << " " << rectangle.position.r << endl;
 	}
 }
@@ -163,7 +166,6 @@ int main(int argc, char* argv[]) {
 	shuffle(rectangles.begin(), rectangles.end(), default_random_engine(seed));
 
 	for (const Rectangle &r : rectangles) {
-		cout << "Agregando el rectángulo n°" << r.id << endl;
 		strip.addRectangleGreedy(r);
 	}
 
