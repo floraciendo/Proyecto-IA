@@ -10,7 +10,7 @@
 \usepackage{float}
 
 \begin{document}
-\title{Inteligencia Artificial \\ \begin{Large}Informe Final: Problema 2D Strip Packing\end{Large}}
+\title{Inteligencia Artificial \\ \begin{Large}Informe Final: 2D Strip Packing Problem\end{Large}}
 \author{Florencia Ram\'irez Sancristoful}
 \date{20 de noviembre de 2023}
 \maketitle
@@ -45,24 +45,17 @@ Bibliograf\'ia (5\%): & \underline{\hspace{2cm}}\\
 
 \section{Introducci\'on}
 
-Una explicaci\'on breve del contenido del informe, es decir, detalla: Prop\'osito, Estructura del Documento, Descripci\'on (muy breve) del Problema y Motivaci\'on e ideas fundamentales de la propuesta de soluci\'on. Incluye la descripci\'on del contenido del Informe secci\'on por secci\'on.
-\vspace{0.2cm}
-
 El \emph{2D Strip Packing Problem} (2DPP) es un problema de gran inter\'es estudiado por diversas industrias, derivado de los problemas de empaquetamiento y est\'a enfocado en la optimizaci\'on del espacio. Este problema consiste en ordenar, sin solapar, un conjunto de elementos rectangulares, cada uno con dimensiones conocidas, en una regi\'on de ancho fijo pero alto infinito, teniendo como objetivo final minimizar el \'area inutilizada de dicha regi\'on.
 
 Este trabajo tiene por objetivo enfatizar la importancia del 2DSPP, presentando el estado del arte de este problema, dando a conocer las t\'ecnicas de resoluci\'on m\'as relevantes existentes en la literatura actual. Analizando las ventajas y desventajas que tienen, para compararlas entre s\'i, midiendo la eficiencia y calidad de las soluciones encontradas por cada uno de estos m\'etodos mencionados.
 
 Dado que el 2DSPP tiene una gran cantidad de aplicaciones pr\'acticas reales en la actualidad~\cite{junior2022rectangular}~\cite{vasilyev2023generalized}, el desarrollo de este trabajo est\'a impulsado por el deseo de contribuir a futuras investigaciones en la b\'usqueda e innovaci\'on de nuevos m\'etodos de resoluci\'on, de modo que puedan adaptarse a los cambios del futuro y sigan brindando soluciones eficientes a este problema.
 
-El resto de las secciones de este documento est\'an estructuradas de la siguiente manera, en la secci\'on 2 se explican los conceptos fundamentales del 2DSPP. En la secci\'on 3 se presenta el Estado del Arte del problema. En la secci\'on 4 se analizan algunos modelos matem\'aticos que entregan una soluci\'on al problema. Finalmente, en la secci\'on 5 se presentan las conclusiones.
+El resto de las secciones de este documento est\'an estructuradas de la siguiente manera, en la secci\'on 2 se explican los conceptos fundamentales del 2DSPP. En la secci\'on 3 se presenta el Estado del Arte del problema. En la secci\'on 4 se analizan algunos modelos matem\'aticos que entregan una soluci\'on al problema. En la secci\'on 5 se propone una representaci\'on para la resoluci\'on de este problema y en la secci\'on 6 se expone el algoritmo propuesto. En la secci\'on 7 se realizan pruebas para comparar el rendimiento de este algoritmo respecto a las soluciones entregadas por t\'ecnicas anteriores, que luego son presentadas y analizadas en la secci\'on 8. Finalmente, en la secci\'on 9 se presentan las conclusiones.
 
 \section{Definici\'on del Problema}
 
-Explicaci\'on del problema que se va a estudiar, en qu\'e consiste, cu\'ales son sus variables , restricciones y objetivo(s) de manera general (en palabras, no una formulaci\'on matem\'atica). Debe entenderse claramente el problema y qu\'e busca resolver. Explicar si existen problemas relacionados. Destacar, si existen, las variantes m\'as conocidas.\\
-Redactar en tercera persona, sin faltas de ortograf\'ia y referenciar correctamente sus fuentes mediante el comando  \verb+\cite{ }+. Por ejemplo, para hacer referencia al art\'iculo de algoritmos h\'ibridos para problemas de satisfacci\'on de restricciones~\cite{lodi2002two}.
-\vspace{0.2cm}
-
-El \emph{2D Strip Packing Problem} es un problema combinatorial de optimizaci\'on derivado de los problemas de empaquetamiento~\cite{oliveira2016survey}, en el cual se deben ajustar una serie de elementos rectangulares, con un ancho $w$ y alto $h$ definido, en una regi\'on rectangular de ancho $W$ y alto infinito, minimizando el \'area total inutilizada de la regi\'on o minimizando la altura total de la regi\'on. Este es un problema NP-Complejo conocido con bastantes aplicaciones en diversas industrias, incluyendo industrias madereras, vidrieras, metal\'urgicas, textiles, entre otras~\cite{lodi2002two}~\cite{vasilyev2023generalized}.
+El \emph{2D Strip Packing Problem} es un problema combinatorial de optimizaci\'on derivado de los problemas de empaquetamiento~\cite{oliveira2016survey}, en el cual se deben ajustar una serie de elementos rectangulares, con un ancho y alto definido, en una regi\'on rectangular de ancho y alto infinito, minimizando el \'area total inutilizada de la regi\'on o minimizando la altura total de la regi\'on. Este es un problema NP-Complejo conocido con bastantes aplicaciones en diversas industrias, incluyendo industrias madereras, vidrieras, metal\'urgicas, textiles, entre otras~\cite{lodi2002two}~\cite{vasilyev2023generalized}.
 
 Al ser un problema NP-Complejo, ha sido estudiado de manera amplia con anterioridad y una de las limitaciones, o dificultades, que ha presentado es que los algoritmos de resoluci\'on propuestos en la literatura se dividen en tres tipos, los m\'etodos exactos, los m\'etodos heur\'isticos y los m\'etodos h\'ibridos~\cite{he2013heuristics}~\cite{junior2023framework}~\cite{oliveira2016survey}~\cite{wei2017improved}.
 
@@ -87,16 +80,13 @@ El \emph{2D Strip Packing Problem} es considerado un subproblema de los llamados
 
 Algunas de las caracter\'isticas que pueden cambiar en las variantes de este problema son las dimensiones, tipos de cortes o patrones, conocimiento previo de los elementos, formas, ortogonalidad y rotaci\'on~\cite{junior2022rectangular}~\cite{oliveira2016survey}.
 
-Entre estas posibles variantes, son normalmente conocidos cuatro subproblemas que consideran limitaciones relacionadas a la rotaci\'on y corte de los elementos~\cite{junior2022rectangular}~\cite{lodi2002two}. En relaci\'on a la rotaci\'on de estos elementos, tienen una orientaci\'on fija que no se puede modificar (O) o pueden ser rotados en 90\textdegree (R), y en relaci\'on al tipo de corte de estos, se deben acomodar para permitir cortes en guillotina (G) o pueden ser posicionados libremente (F). Considerando estas caracter\'isticas, se identifica la variante RF que tiene la menor cantidad de restricciones y, en consecuencia, es considerada como la m\'as f\'acil de resolver. Si se fija la orientaci\'on de estos elementos, no pueden ser rotados, se define la variante OF. Finalmente, si se imponen los cortes en guillotina se pueden identificar las versiones RG y OG, permitiendo la rotaci\'on de los elementos o fijando su orientaci\'on, respectivamente.
+Entre estas posibles variantes, son normalmente conocidos cuatro subproblemas que consideran limitaciones relacionadas a la rotaci\'on y corte de los elementos~\cite{junior2022rectangular}~\cite{lodi2002two}. En relaci\'on a la rotaci\'on de estos elementos, tienen una orientaci\'on fija que no se puede modificar (O) o pueden ser rotados en 90\textdegree (R), y en relaci\'on al tipo de corte de estos, se deben acomodar para permitir cortes en guillotina (G) o pueden ser posicionados libremente (F). Considerando estas caracter\'isticas, se identifica la variante RF que tiene la menor cantidad de restricciones y, en consecuencia, es considerada como la m\'as f\'acil de resolver. Si se fija la orientaci\'on de estos elementos, no pueden ser rotados, se define la variante OF. Finalmente, si se imponen los cortes en guillotina se pueden identificar las versiones RG y OG, permitiendo la rotaci\'on de los elementos o fijando su orientaci\'on, respectivamente. El estudio hecho en este informe tiene un enfoque en la variante RF, considera la posible rotaci\'on de los objetos y estos pueden ser posionados libremente en la regi\'on.
 
 Tambi\'en, se distinguen dos categor\'ias respecto al conocimiento previo sobre los elementos~\cite{oliveira2016survey}. La primera categor\'ia es conocida como \emph{online} y en esta no se tiene conocimiento sobre c\'omo son los siguientes elementos a posicionar, implica que una vez posicionado un elemento este ya no puede ser movido. En cambio, la segunda categor\'ia, \emph{offline}, es la m\'as com\'un en investigaciones y se distingue por tener conocimiento previo de todos los elementos a posicionar, lo cual hace posible definir una secuencia sobre c\'omo ser\'an colocados.
 
 Dos de los problemas m\'as similares son el \emph{Rectangular Packing Problem} y el \emph{Bin Packing Problem}. En el primero se deben ordenar una serie de rect\'angulos en una regi\'on de ancho y largo fijo con el objetivo de maximizar el \'area de estos rect\'angulos ajustados~\cite{chen2007two}. Por otro lado, en el segundo se debe ajustar una serie de elementos en una cantidad finita de contenedores de ancho y alto fijo, tiene como objetivo minimizar la cantidad de contenedores utilizados~\cite{lodi2002two}.
 
 \section{Estado del Arte}
-
-La informaci\'on que describen en este punto se basa en los estudios realizados con antelaci\'on respecto al tema. Lo m\'as importante que se ha hecho hasta ahora con relaci\'on al problema. Deber\'ia responder preguntas como las siguientes: ?`cu\'ando surge?, ?`qu\'e m\'etodos se han usado para resolverlo?, ?`cu\'ales son los mejores algoritmos que se han creado hasta la fecha?, ?`qu\'e representaciones han tenido los mejores resultados?, ?`cu\'al es la tendencia actual para resolver el problema?, tipos de movimientos, heur\'isticas, m\'etodos completos, tendencias, etc... Puede incluir gr\'aficos comparativos o explicativos.
-\vspace{0.2cm}
 
 El \emph{2D Strip Packing Problem} (2DSPP) es uno de los problemas de empaquetamiento m\'as simples que surge de la necesidad de reducir los costos operacionales de las industrias transformadoras de materias primas~\cite{junior2022rectangular}, por lo cual ha sido estudiado intensamente y se han propuesto diversos m\'etodos para su resoluci\'on, los cuales pueden ser divididos en tres categor\'ias, m\'etodos exactos, heur\'isticos e h\'ibridos.
 
@@ -128,7 +118,7 @@ Otros m\'etodos que no entran en estas dos categor\'ias son \emph{Heuristic Recu
 
 Los m\'etodos h\'ibridos, como su nombre lo indica, brindan soluciones de buena calidad de manera eficiente combinando el uso de diversos algoritmos. Surgen bajo la idea de obtener una soluci\'on inicial que luego va a ser mejorada usando otro algoritmo. Es com\'un el uso de \emph{Genetic Algorithm} (GA), \emph{Simulated Annealing} (SA) o \emph{Tabu Search} (TS) para generar la soluci\'on inicial y son normalmente usados con los algoritmos BL, BF y todas sus versiones mejoradas.
 
-GA utiliza una analog\'ia de la selecci\'on natural, a todas las posibles soluciones de un problema se le asigna un valor bas\'andose en una \emph{fitness function}~\cite{thomas2013hybrid}, lo que finalmente se utiliza para generar una secuencia de los elementos a posicionar. SA surge como una variante del m\'etodo \emph{Hill-Climbing} (HC)~\cite{hopper2001empirical}, una t\'ecnica de b\'usqueda local que se mueve entre las soluciones de un vecindario, si se encuentra una mejor soluci\'on realiza el cambio y sigue con la b\'usqueda, para que no estancarse en un m\'inimo local, en vez de solo escoger soluciones mejores que la actual, acepta soluciones peores. TS, al igual que SA, es una t\'ecnica de b\'usqueda local derivada de HC~\cite{wei2011skyline}, a la cual se le adjunta una memoria a corto plazo, para guardar las \'ultimas soluciones y evitar los ciclos entre las mismas.
+GA utiliza una analog\'ia de la selecci\'on natural, a todas las posibles soluciones de un problema se le asigna un valor bas\'andose en una \emph{fitness function}~\cite{thomas2013hybrid}, lo que finalmente se utiliza para generar una secuencia de los elementos a posicionar. SA surge como una variante del m\'etodo \emph{Hill-Climbing} (HC)~\cite{hopper2001empirical}, una t\'ecnica de b\'usqueda local que se mueve entre las soluciones de un vecindario, si se encuentra una mejor soluci\'on realiza el cambio y sigue con la b\'usqueda hasta no encontrar mejoras dentro del vecindario. SA soluciona este problema aceptando soluciones de peor calidad en base a una probabilidad asociada a la diferencia de la calidad de esta soluci\'o. TS, al igual que SA, es una t\'ecnica de b\'usqueda local derivada de HC~\cite{wei2011skyline}, a la cual se le adjunta una memoria a corto plazo, para guardar las \'ultimas soluciones y evitar los ciclos entre las mismas.
 
 \subsection{Comparaciones entre m\'etodos}
 
@@ -195,9 +185,6 @@ Al comparar el algoritmo DHA~\cite{he2013heuristics} con otros m\'etodos h\'ibri
 \end{table}
 
 \section{Modelo Matem\'atico}
-
-Uno o m\'as modelos matem\'aticos para el problema, idealmente indicando el espacio de b\'usqueda para cada uno. Cada modelo debe estar correctamente referenciado, adem\'as no debe ser una imagen extraida. Tambi\'en deben explicarse en detalle cada una de las partes, mostrando claramente la funci\'on a maximizar/minimizar, variables y restricciones. Tanto las f\'ormulas como las explicaciones deben ser consistentes.
-\vspace{0.2cm}
 
 Los modelos presentados en la literatura~\cite{he2013heuristics}~\cite{hopper2001empirical}~\cite{kenmochi2009exact}~\cite{oliveira2016survey} para la resoluci\'on de las diversas variantes del 2DSPP tienen en com\'un algunos de los aspectos b\'asicos m\'as relevantes de este problema, por lo cual, en base a estos modelos se combinan y propone el siguiente modelo matem\'atico para la resoluci\'on de la variante RF, que permite rotaciones y posiciones libres.
 
@@ -267,7 +254,56 @@ Esta restricci\'on aplica el mismo principio que la restricci\'on anterior. Si s
 Usando un plano cartesiano como referencia, se considera que el ancho de la regi\'on va desde el punto (0, 0) al punto ($W$, 0) y si alguna de las variables de posici\'on de los elementos tiene un valor negativo, significa que fue colocado fuera de los m\'argenes establecidos de la regi\'on. Por la definici\'on de las constantes, las dimensiones de los elementos corresponden a un n\'umero entero, no considera decimales. Por \'ultimo, las variables del \'indice de rotaci\'on de los objetos corresponde a una variable binaria, lo que significa que sus \'unicos valores posibles son 0 o 1.
 
 \section{Representaci\'on}
-Representaci\'on de \textbf{soluciones} (arreglos, matrices, etc.). En caso de t\'ecnicas completas indicar variables y dominios. Incluir justificaci\'on y ejemplos para mayor claridad.
+
+Para la resoluci\'on de este problema se seguir\'a la l\'ogica de la heur\'istica BL para el posicionamiento de los rect\'angulos, con el objetivo final de minimizar el \'area inutilizada, lo cual se hace minimizando la altura. Se presentan 4 representaciones en total, una se utiliza para representar los rect\'angulos, una para la posici\'on y rotaci\'on de estos rect\'angulos, una para el orden en que ser\'an posicionados y una para la regi\'on en la que se colocan estos rect\'angulos, en la cual se va construyendo la soluci\'on final.
+
+\subsection{Rect\'angulos}
+Los rect\'angulos se representar\'an mediante una estructura llamada \emph{Rectangle}, la cual tiene los siguientes atributos:
+\begin{itemize}
+    \item Id del rect\'angulo
+    \item Ancho del rect\'angulo.
+    \item Alto del rect\'angulo.
+    \item Estructura \emph{Position}, la cual indica la posici\'on y rotaci\'on que tomaa el rect\'angulo en la soluci\'on. 
+\end{itemize}
+
+\subsection{Posiciones}
+
+Las posiciones $(x,y)$ e \'indices de rotaci\'on de estos rect\'angulos se representar\'an mediante una estructura llamada \emph{Position}, la cual tiene los siguientes atributos:
+\begin{itemize}
+    \item Coordenada $x$ de la esquina inferior izquierda del rect\'angulo.
+    \item Coordenada $y$ de la esquina inferior izquierda del rect\'angulo.
+    \item \'Indice de rotaci\'on del rect\'angulo, lo que indica si es rotado o no.
+\end{itemize}
+
+\subsection{Orden}
+
+Se utilizar\'a un vector de estructuras \emph{Rectangle} de tama\~no $n$, correspondiente a la cantidad de rect\'angulos, para representar el orden en que van a ser colocados estos rect\'angulos, estando en la posici\'on $i$ el $i$-\'esimo rect\'angulo que se agrega a la regi\'on.
+
+La figura~\ref{fig:orden} ilustra el orden en que ser\'ian agregados 5 rect\'angulos a la regi\'on, en este ejemplo, el primer rect\'angulo que se posiciona es el rect\'angulo $R_4$, refiri\'endose al rect\'angulo con $id = 4$, mientras que el rect\'angulo $R_1$ va a ser el quinto y \'ultimo en ser posicionado.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{images/orden.eps}
+    \caption{Ejemplo de un vector de tama\~no 5.}
+    \label{fig:orden}
+\end{figure}
+
+\subsection{Regi\'on}
+
+La regi\'on de ancho fijo y alto infinito, en la cual se deben posicionar los rect\'angulos, se representar\'a con una clase llamada \emph{Strip}, la cual tiene los siguientes atributos:
+\begin{itemize}
+    \item Ancho fijo de la regi\'on.
+    \item Vector de estructuras \emph{Rectangle}, indicando los rect\'angulos que ya fueron posicionados en la regi\'on.
+\end{itemize}
+
+La figura~\ref{fig:region} muestra las coordenadas e \'indices de rotaci\'on que toman 3 rect\'angulos una vez que son posicionados en la regi\'on, considerando que se agregan en el orden mencionado anteriormente.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.4\textwidth]{images/region.eps}
+    \caption{Ejemplo del posicionamiento de 3 rect\'angulos siguiendo el orden mencionado.}
+    \label{fig:region}
+\end{figure}
 
 \section{Descripci\'on del Algoritmo}
 
