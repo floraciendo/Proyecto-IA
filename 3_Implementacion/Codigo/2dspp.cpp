@@ -4,7 +4,7 @@
 #include <random>
 #include <algorithm>
 #include <cstdlib>
-#include <chrono>
+// #include <chrono>
 
 #include "2dspp.hpp"
 
@@ -28,10 +28,12 @@ bool Strip::canBePlaced(Rectangle rectangle, int posX, int posY, int orientation
 void Strip::addRectangleGreedy(Rectangle rectangle) {
 	int bestY = INT32_MAX;
 	int bestX = 0;
+	int orientation;
 
 	// Intenta agregar la menor altura posible
 	if (rectangle.width < rectangle.height && rectangle.height <= fixedWidth) {
 		// Lo puede colocar rotado
+		orientation = 1;
 		for (int x = 0; x <= fixedWidth - rectangle.height; x++) {
 			int y = 0;
 
@@ -41,17 +43,14 @@ void Strip::addRectangleGreedy(Rectangle rectangle) {
 				}
 			}
 			// Revisa si encontró alguna posición mejor
-			if (y < bestY && canBePlaced(rectangle, x, y, 1, rectangles)) {
+			if (y < bestY && canBePlaced(rectangle, x, y, orientation, rectangles)) {
 				bestY = y;
 				bestX = x;
 			}
 		}
-
-		// Agrega el rectangulo
-		rectangle.position = {bestX, bestY, 1};
-		rectangles.push_back(rectangle);
 	} else {
 		// Asumiendo que todas las instancias van a ser factibles, lo coloca sin rotar
+		orientation = 0;
 		for (int x = 0; x <= fixedWidth - rectangle.width; x++) {
 			int y = 0;
 
@@ -61,15 +60,15 @@ void Strip::addRectangleGreedy(Rectangle rectangle) {
 				}
 			}
 			// Revisa si encontró alguna posición mejor
-			if (y < bestY && canBePlaced(rectangle, x, y, 0, rectangles)) {
+			if (y < bestY && canBePlaced(rectangle, x, y, orientation, rectangles)) {
 				bestY = y;
 				bestX = x;
 			}
 		}
-		// Agrega el rectangulo
-		rectangle.position = {bestX, bestY, 0};
-		rectangles.push_back(rectangle);
 	}
+	// Agrega el rectangulo
+	rectangle.position = {bestX, bestY, orientation};
+	rectangles.push_back(rectangle);
 }
 
 // Revisa todos los espacios vacíos, debería ser igual al área inutilizada
@@ -142,8 +141,6 @@ void Strip::hillClimbingFirstImprovement() {
 				// Revisa si la solución encontrada es mejor
 				improvedSolution = evaluationFunction(improvedRectangles);
 				if (improvedSolution < currentSolution) {
-					cout << "Rectángulo n°" << rectangles[counter].id << " altura encontrada "<< getHeight(improvedRectangles) << " altura anterior " << getHeight(rectangles) << endl;
-					cout << "Función de evaluación " << improvedSolution << endl;
 					// Reemplaza la solución
 					rectangles[counter] = currentRectangle;
 					currentSolution = improvedSolution;
@@ -155,13 +152,11 @@ void Strip::hillClimbingFirstImprovement() {
 
 			// Si encuentra una mejor solución deja de buscar en esta iteración
 			if (improvement) {
-				cout << "Se mejoró la posición del rectángulo n°" << rectangles[counter].id << endl;
 				break;
 			}
 		}
 		// Si no hay mejoras significa que es un óptimo
 		if (!(improvement)) {
-			cout << "Se encontró un óptimo local revisando el rectángulo n°" << rectangles[counter].id << endl;
 			local = true;
 		}
 		// Sigue usando el rectángulo anterior y actualiza los espacios vacíos
@@ -216,20 +211,15 @@ void Strip::printOutput() {
 	// Obtiene los rectangulos ordenados por su id
 	vector<Rectangle> sortedRectangles = sortRectangles();
 
-	int minimo = 0;
-
 	// Imprime las posiciones e índice de rotación de cada uno de los rectángulos
 	for (const Rectangle &rectangle : sortedRectangles) {
 		cout << rectangle.position.x << " " << rectangle.position.y << " " << rectangle.position.r << endl;
-		minimo += rectangle.width * rectangle.height;
 	}
-	float alt = minimo / fixedWidth;
-	cout << "altura minima " << alt << endl;
 }
 
 int main(int argc, char* argv[]) {
-	// Tiempo cuando parte la ejecución del programa
-	auto startTime = chrono::high_resolution_clock::now();
+	// // Tiempo cuando parte la ejecución del programa
+	// auto startTime = chrono::high_resolution_clock::now();
 
 	// Nombre de la instancia y semilla
 	string instance = argv[1];
@@ -269,11 +259,8 @@ int main(int argc, char* argv[]) {
 
 	// Obtiene la solución inicial
 	for (const Rectangle &r : rectangles) {
-		cout << "Agregando el rectángulo n°" << r.id << endl;
 		strip.addRectangleGreedy(r);
 	}
-
-	strip.printOutput();
 
 	// Mejora la solución, si se puede, con HC-FI
 	strip.hillClimbingFirstImprovement();
@@ -281,10 +268,10 @@ int main(int argc, char* argv[]) {
 	// Muestra la solución encontrada
 	strip.printOutput();
 
-	auto stopTime = chrono::high_resolution_clock::now();
-	// Calcula el tiempo final de ejecución
-	chrono::duration<double> executionTime = stopTime - startTime;
-	cout << "Tiempo de ejecución: " << executionTime.count() << endl;
+	// auto stopTime = chrono::high_resolution_clock::now();
+	// // Calcula el tiempo final de ejecución
+	// chrono::duration<double> executionTime = stopTime - startTime;
+	// cout << "Tiempo de ejecución: " << executionTime.count() << endl;
 
 	return 0;
 }

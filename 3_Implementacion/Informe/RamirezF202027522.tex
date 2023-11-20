@@ -8,6 +8,7 @@
 \usepackage[top=3cm,bottom=3cm,left=3.5cm,right=3.5cm,footskip=1.5cm,headheight=1.5cm,headsep=.5cm,textheight=3cm]{geometry}
 
 \usepackage{float}
+\usepackage[linesnumbered, ruled]{algorithm2e}
 
 \begin{document}
 \title{Inteligencia Artificial \\ \begin{Large}Informe Final: 2D Strip Packing Problem\end{Large}}
@@ -307,7 +308,149 @@ La figura~\ref{fig:region} muestra las coordenadas e \'indices de rotaci\'on que
 
 \section{Descripci\'on del Algoritmo}
 
-C\'omo fue implementada la soluci\'on. Interesa la implementaci\'on particular m\'as que el algoritmo gen\'erico, es decir, si se tiene que implementar SA, lo que se espera es que se explique en pseudoc\'odigo la estructura general y en p\'arrafos explicativos c\'omo fue implementada cada parte para su problema particular. Si se utilizan operadores/movimientos se debe justificar por qu\'e se utilizaron dichos operadores/movimientos. En caso de una t\'ecnica completa, describir detalles relevantes del proceso, si se utiliza recursi\'on o no, explicar c\'omo se van construyendo soluciones, cu\'ando se revisan restricciones, c\'omo se registran conflictos, etc. En este punto no se espera que se incluya c\'odigo, eso va aparte.
+El algoritmo propuesto para la resoluci\'on del 2DSPP utiliza una t\'ecnica \emph{greedy} para generar una soluci\'on inicial, la cual sigue la l\'ogica de la heur\'istica BL. Se genera esta primera soluci\'on con la intenci\'on de mejorarla usando la t\'ecnica \emph{Hill-Climbing First Improvement} (HC-FI), esta t\'ecnica itera generando un vecindario aplicando un \emph{movimiento}, si encuentra alg\'un vecino con una soluci\'on mejor, este reemplazar\'a a la soluci\'on actual y seguir\'a con su b\'usqueda hasta no encontrar mejoras o realizar una cantidad de iteraciones determinadas, es decir, aplicando un criterio de t\'ermino.
+
+El \emph{movimiento} que se aplica, utilizando las representaciones mencionadas anteriormente, es el reposicionamiento del \'ultimo rect\'angulo que fue agregado a la regi\'on en algunos de los espacios inutilizados. Se itera seleccionando los rect\'angulos de manera descendente debido a la estrategia \emph{greedy} implementada, en la t\'ecnica BL los \'ultimos rect\'angulos en ser posicionados quedar\'an sobre, o la derecha, de los rect\'angulos posicionados con anterioridad, esto implica que estos \'ultimos tienen una mayor probabilidad de aumentar la altura de la regi\'on.
+
+\subsection{Soluci\'on inicial \emph{greedy}}
+
+Se utiliza la heur\'istica BL para posicionar los rect\'angulos lo m\'as abajo y a la izquierda posible con la intenci\'on de aumentar lo menos posible la altura de la regi\'on. Para la implementaci\'on \emph{greedy}, revisa si el rect\'angulo es m\'as alto que ancho, eso es $h_i > w_i$. En caso de ser as\'i, agrega el rect\'angulo rotado, ya que este aumentar\'ia la menor altura posible al ser colocado sobre un rect\'angulo lo m\'as arriba posible, de lo contrario, no rota el rect\'angulo cuando es posicionado.
+\vspace{0.2cm}
+
+\begin{algorithm}[H]
+\caption{\emph{Greedy} implementado usando la heur\'istica BL.}
+\label{alg:greedy}
+
+\SetNoFillComment 
+
+% Cambia el nombre a procedure
+\SetKwProg{Fn}{Procedure}{}{end}
+\SetKwFunction{greedy}{addRectangleGreedy}
+
+% Inputs y outputs
+\KwResult{Agrega el rect\'angulo lo m\'as abajo e izquierda posible}
+\KwData{$anchoRectangulo, altoRectangulo, anchoRegion, rectangulosYaPosicionados$}
+
+\Fn{\greedy{rectangulo}}{
+$mejorY \leftarrow \infty$\;
+$mejorX \leftarrow 0$\;
+\eIf{anchoRectangulo $<$ altoRectangulo {\bf and} altoRectangulo $\leq$ anchoRegion}{
+    $orientacion \leftarrow 1$\;
+    $x \leftarrow 0$\;
+    \For{x $\leq$ anchoRegion $-$ altoRectangulo}{
+        $y \leftarrow 0$\;
+        \ForEach{rectanguloYaAgregado $\in$ rectangulosYaPosicionados}{
+            $y \leftarrow \max \{y, \text{ posici\'on $y$ superior de }rectanguloYaAgregado\}$\;
+        }
+        \If{y $<$ mejorY {\bf and} sePuedePosicionar()}{
+        $mejorY \leftarrow y$\;
+        $mejorX \leftarrow x$\;
+        }
+        $x \leftarrow x + 1$\;
+    }
+}{
+    $orientacion \leftarrow 0$\;
+    \tcc{se repiten las l\'ineas 6 a 17 pero se compara con $anchoRectangulo$ en vez de $altoRectangulo$}
+}
+$rectangulo \leftarrow \{x, y, orientacion\}$\;
+$rectangulosYaPosicionados \leftarrow rectangulosYaPosicionados + rectangulo$\;
+}
+\end{algorithm}
+\vspace{0.2cm}
+
+El algoritmo~\ref{alg:greedy} utiliza una funci\'on auxiliar \emph{sePuedePosicionar()}, esta revisa que los rect\'angulos no se solapen entre s\'i, luego tambi\'en se revisa que el rect\'angulo no supere el ancho de la regi\'on antes de la ejecuci\'on de esta funci\'on. La restricci\'on respecto a la naturaleza de las variables se aplica al momento de inicializarlas, que se hacen como n\'umeros enteros. Este algoritmo es ejecutado cada vez que se agrega un rect\'angulo por primera vez a la regi\'on.
+
+\subsection{Implementaci\'on de \emph{Hill-Climibing First Improvement}}
+
+Se pueden identificar dos versiones de la heur\'istica HC, \emph{First Improvement} (FI) o \emph{Best Improvement} (BI), dependiendo de la forma en la que recorre el vecindario y selecciona al mejor vecino. La diferencia entre HC-BI y HC-FI es que el primero revisa todo el vecindario y selecciona el mejor vecino de todos, en cambio, el segundo selecciona el primer vecino mejor que encuentra.
+
+Se \'a HC-FI para mejorar la soluci\'on inicial utilizando el movimiento antes mencionado, se itera sobre todos los rect\'angulos posicionados de manera descendente, revisa los espacios inutilizados con el objetivo de encontrar alguna posici\'on con la que se mejore la altura y, a su vez, el \'area inutilizada. El tama\~no del vecindario que se genera es igual a la cantidad de espacios inutilizados, el \'area inutilizada, y en el peor caso HC-FI revisar\'a el vecindario completo antes de iterar sobre el rect\'angulo siguiente o terminar su ejecuci\'on.
+\vspace{0.2cm}
+
+\begin{algorithm}[H]
+\caption{HC-FI implementado.}
+\label{alg:hillclimbing}
+
+\SetNoFillComment 
+
+% Cambia el nombre a procedure
+\SetKwProg{Fn}{Procedure}{}{end}
+\SetKwFunction{hillclimbing}{hillClimbingFirstImprovement}
+
+% Inputs y outputs
+\KwResult{Mejora la soluci\'on inicial encontrando un \'optimo}
+\KwData{$anchoRegion, \: rectangulosYaPosicionados, \: espaciosVacios,$\\ $cantidadEspaciosVacios$}
+
+\Fn{\hillclimbing{}}{
+$calcularEspaciosVacios()$\;
+$solucionActual \leftarrow obtenerAreaInutilizada(rectangulosYaPosicionados)$\;
+$rectangulosMejorados \leftarrow rectangulosYaPosicionados$\;
+$contador \leftarrow cantidadEspaciosVacios$\;
+$optimoLocal \leftarrow \texttt{false}$\;
+
+\Repeat{optimoLocal {\bf or} contador $= 0$}{
+    $mejoraEncontrada \leftarrow \texttt{false}$\;
+    $numeroVecino \leftarrow 0$\;
+    \Repeat{mejoraEncontrada {\bf or} numeroVecino = cantidadEspaciosVacios}{
+        $rectanguloActual \leftarrow rectangulosMejorados[contador]$\;
+
+        $espacioVacio \leftarrow espaciosVacios[numeroVecino]$\;
+        \uIf{sePuedePosicionar() \text{sin rotar}}{
+            $orientacion \leftarrow 0$\;
+            $rectanguloActual \leftarrow \{(x, y) \text{ de } espacioVacio, \: orientacion\}$\;
+            $rectangulosMejorados \leftarrow rectangulosMejorados + rectanguloActual$\;
+            $solucionMejorada \leftarrow obtenerAreaInutilizada(rectangulosMejorados)$\;
+            \If{solucionMejorada $<$ solucionActual}{
+                $rectangulosYaPosicionados[contador] \leftarrow rectanguloActual$\;
+                $solucionActual \leftarrow solucionMejorada$\;
+                $mejoraEncontrada \leftarrow \texttt{true}$\;
+            }
+        }
+        \ElseIf{sePuedePosicionar() \text{rotado}}{
+            $orientacion \leftarrow 1$\;
+            \tcc{se repiten las l\'ineas 15 a 22}
+        }
+        $rectangulosMejorados \leftarrow rectangulosYaPosicionados$\;
+        $numeroVecino \leftarrow numeroVecino + 1$\;
+    }
+    \If{{\bf not} mejoraEncontrada}{
+        $optimoLocal \leftarrow \texttt{true}$\;
+    }
+    $calcularespaciosVacios()$\;
+    $contador \leftarrow contador - 1$\;
+}
+}
+\end{algorithm}
+\vspace{0.2cm}
+
+El algoritmo~\ref{alg:hillclimbing} se compone de dos ciclos principales, el primero itera hasta que se encuentre un \'optimo local o llegue a su criterio de t\'ermino, que revise todos los rect\'angulos, y el segundo itera hasta que encuentre una mejora o haya revisado todas las posiciones disponibles. La funci\'on de evaluaci\'on utilizada para comparar las soluciones corresponde a la funci\'on \emph{obtenerAreaInutilizada()}, correspondiente al algoritmo~\ref{alg:funcionevaluacion}, a la cual se le entrega el vector con todos los rect\'angulos ya posicionados.
+\vspace{0.2cm}
+
+\begin{algorithm}[H]
+    \caption{Funci\'on de evaluaci\'on \emph{obtenerAreaInutilizada()}.}
+    \label{alg:funcionevaluacion}
+
+    \SetNoFillComment 
+
+    % Cambia el nombre a procedure
+    \SetKwProg{Fn}{Procedure}{}{end}
+    \SetKwFunction{evaluacion}{evaluationFunction}
+
+    % Inputs y outputs
+    \KwResult{Calcula el \'area inutilizada de la regi\'on}
+    \KwData{$anchoRegion, \: altoRegion$}
+
+    \Fn{\evaluacion{rectangulosYaPosicionados}}{
+    $areaTotal \leftarrow anchoRegion * altoRegion$\;
+    $areaRectangulos \leftarrow 0$\;
+
+    \ForEach{rectangulo $\in$ rectangulosYaPosicionados}{
+        $areaRectangulo \leftarrow \text{ancho de } rectangulo * \text{alto de } rectangulo$\;
+        $areaRectangulos \leftarrow areaRectangulos + areaRectangulo$\;
+    }
+    \KwRet{areaTotal $-$ areaRectangulos}\;
+    }
+\end{algorithm}
 
 \section{Experimentos}
 
