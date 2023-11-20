@@ -11,6 +11,7 @@
 \usepackage[linesnumbered, ruled]{algorithm2e}
 
 \begin{document}
+
 \title{Inteligencia Artificial \\ \begin{Large}Informe Final: 2D Strip Packing Problem\end{Large}}
 \author{Florencia Ram\'irez Sancristoful}
 \date{20 de noviembre de 2023}
@@ -37,10 +38,8 @@ Bibliograf\'ia (5\%): & \underline{\hspace{2cm}}\\
 \vspace{0.6cm}
 
 
-\begin{abstract}
-    Resumen del informe en no m\'as de 10 l\'ineas, donde se sintetice el problema que se trata, el acercamiento propuesto y sirva para que un lector no involucrado comprenda el objetivo del documento.
-    \vspace{0.2cm}    
-    El \emph{2D Strip Packing Problem} es un problema de optimizaci\'on en el cual un conjunto de elementos deben ser posicionados en una regi\'on definida cumpliendo ciertas condiciones con el objetivo de minimizar el espacio necesario para ajustar estos elementos. Se han propuesto una gran variedad de m\'etodos y modelos para la resoluci\'on de este problema y variantes existentes, se presentan los m\'etodos m\'as relevantes y conocidos para luego realizar un an\'alisis comparativo entre ellos con un enfoque la variante con rotaciones y sin cortes en guillotina.
+\begin{abstract}   
+    El \emph{2D Strip Packing Problem} es un problema de optimizaci\'on en el cual un conjunto de elementos deben ser posicionados en una regi\'on definida cumpliendo ciertas condiciones con el objetivo de minimizar el espacio necesario para ajustar estos elementos. Se han propuesto una gran variedad de m\'etodos y modelos para la resoluci\'on de este problema y variantes existentes. En este trabajo se presentan los m\'etodos m\'as relevantes y conocidos para luego realizar un an\'alisis comparativo entre ellos con un enfoque la variante con rotaciones y sin cortes en guillotina. Adem\'as, propone una representaci\'on y algoritmo para la resoluci\'on de esta variante, cuyos resultados son comparados con otros m\'etodos presentados en la literatura.
 
 \end{abstract}
 
@@ -48,7 +47,7 @@ Bibliograf\'ia (5\%): & \underline{\hspace{2cm}}\\
 
 El \emph{2D Strip Packing Problem} (2DPP) es un problema de gran inter\'es estudiado por diversas industrias, derivado de los problemas de empaquetamiento y est\'a enfocado en la optimizaci\'on del espacio. Este problema consiste en ordenar, sin solapar, un conjunto de elementos rectangulares, cada uno con dimensiones conocidas, en una regi\'on de ancho fijo pero alto infinito, teniendo como objetivo final minimizar el \'area inutilizada de dicha regi\'on.
 
-Este trabajo tiene por objetivo enfatizar la importancia del 2DSPP, presentando el estado del arte de este problema, dando a conocer las t\'ecnicas de resoluci\'on m\'as relevantes existentes en la literatura actual. Analizando las ventajas y desventajas que tienen, para compararlas entre s\'i, midiendo la eficiencia y calidad de las soluciones encontradas por cada uno de estos m\'etodos mencionados.
+Este trabajo tiene por objetivo enfatizar la importancia del 2DSPP, presentando el estado del arte de este problema, dando a conocer las t\'ecnicas de resoluci\'on m\'as relevantes existentes en la literatura actual. Analizando las ventajas y desventajas que tienen, para compararlas entre s\'i, midiendo la eficiencia y calidad de las soluciones encontradas por cada uno de estos m\'etodos mencionados, para luego proponer un nuevo m\'etodo de resoluci\'on.
 
 Dado que el 2DSPP tiene una gran cantidad de aplicaciones pr\'acticas reales en la actualidad~\cite{junior2022rectangular}~\cite{vasilyev2023generalized}, el desarrollo de este trabajo est\'a impulsado por el deseo de contribuir a futuras investigaciones en la b\'usqueda e innovaci\'on de nuevos m\'etodos de resoluci\'on, de modo que puedan adaptarse a los cambios del futuro y sigan brindando soluciones eficientes a este problema.
 
@@ -56,7 +55,7 @@ El resto de las secciones de este documento est\'an estructuradas de la siguient
 
 \section{Definici\'on del Problema}
 
-El \emph{2D Strip Packing Problem} es un problema combinatorial de optimizaci\'on derivado de los problemas de empaquetamiento~\cite{oliveira2016survey}, en el cual se deben ajustar una serie de elementos rectangulares, con un ancho y alto definido, en una regi\'on rectangular de ancho y alto infinito, minimizando el \'area total inutilizada de la regi\'on o minimizando la altura total de la regi\'on. Este es un problema NP-Complejo conocido con bastantes aplicaciones en diversas industrias, incluyendo industrias madereras, vidrieras, metal\'urgicas, textiles, entre otras~\cite{lodi2002two}~\cite{vasilyev2023generalized}.
+El \emph{2D Strip Packing Problem} es un problema combinatorial de optimizaci\'on derivado de los problemas de empaquetamiento~\cite{oliveira2016survey}, en el cual se deben ajustar una serie de elementos rectangulares, con un ancho y alto definido, en una regi\'on rectangular de ancho fijo y alto infinito, minimizando el \'area total inutilizada de la regi\'on o minimizando la altura total de la regi\'on. Este es un problema NP-Complejo conocido con bastantes aplicaciones en diversas industrias, incluyendo industrias madereras, vidrieras, metal\'urgicas, textiles, entre otras~\cite{lodi2002two}~\cite{vasilyev2023generalized}.
 
 Al ser un problema NP-Complejo, ha sido estudiado de manera amplia con anterioridad y una de las limitaciones, o dificultades, que ha presentado es que los algoritmos de resoluci\'on propuestos en la literatura se dividen en tres tipos, los m\'etodos exactos, los m\'etodos heur\'isticos y los m\'etodos h\'ibridos~\cite{he2013heuristics}~\cite{junior2023framework}~\cite{oliveira2016survey}~\cite{wei2017improved}.
 
@@ -81,7 +80,7 @@ El \emph{2D Strip Packing Problem} es considerado un subproblema de los llamados
 
 Algunas de las caracter\'isticas que pueden cambiar en las variantes de este problema son las dimensiones, tipos de cortes o patrones, conocimiento previo de los elementos, formas, ortogonalidad y rotaci\'on~\cite{junior2022rectangular}~\cite{oliveira2016survey}.
 
-Entre estas posibles variantes, son normalmente conocidos cuatro subproblemas que consideran limitaciones relacionadas a la rotaci\'on y corte de los elementos~\cite{junior2022rectangular}~\cite{lodi2002two}. En relaci\'on a la rotaci\'on de estos elementos, tienen una orientaci\'on fija que no se puede modificar (O) o pueden ser rotados en 90\textdegree (R), y en relaci\'on al tipo de corte de estos, se deben acomodar para permitir cortes en guillotina (G) o pueden ser posicionados libremente (F). Considerando estas caracter\'isticas, se identifica la variante RF que tiene la menor cantidad de restricciones y, en consecuencia, es considerada como la m\'as f\'acil de resolver. Si se fija la orientaci\'on de estos elementos, no pueden ser rotados, se define la variante OF. Finalmente, si se imponen los cortes en guillotina se pueden identificar las versiones RG y OG, permitiendo la rotaci\'on de los elementos o fijando su orientaci\'on, respectivamente. El estudio hecho en este informe tiene un enfoque en la variante RF, considera la posible rotaci\'on de los objetos y estos pueden ser posionados libremente en la regi\'on.
+Entre estas posibles variantes, son normalmente conocidos cuatro subproblemas que consideran limitaciones relacionadas a la rotaci\'on y corte de los elementos~\cite{junior2022rectangular}~\cite{lodi2002two}. En relaci\'on a la rotaci\'on de estos elementos, tienen una orientaci\'on fija que no se puede modificar (O) o pueden ser rotados en 90\textdegree \hspace{2pt}(R), y en relaci\'on al tipo de corte de estos, se deben acomodar para permitir cortes en guillotina (G) o pueden ser posicionados libremente (F). Considerando estas caracter\'isticas, se identifica la variante RF que tiene la menor cantidad de restricciones y, en consecuencia, es considerada como la m\'as f\'acil de resolver. Si se fija la orientaci\'on de estos elementos, no pueden ser rotados, se define la variante OF. Finalmente, si se imponen los cortes en guillotina se pueden identificar las versiones RG y OG, permitiendo la rotaci\'on de los elementos o fijando su orientaci\'on, respectivamente. El estudio hecho en este informe tiene un enfoque en la variante RF, considera la posible rotaci\'on de los objetos y estos pueden ser posionados libremente en la regi\'on.
 
 Tambi\'en, se distinguen dos categor\'ias respecto al conocimiento previo sobre los elementos~\cite{oliveira2016survey}. La primera categor\'ia es conocida como \emph{online} y en esta no se tiene conocimiento sobre c\'omo son los siguientes elementos a posicionar, implica que una vez posicionado un elemento este ya no puede ser movido. En cambio, la segunda categor\'ia, \emph{offline}, es la m\'as com\'un en investigaciones y se distingue por tener conocimiento previo de todos los elementos a posicionar, lo cual hace posible definir una secuencia sobre c\'omo ser\'an colocados.
 
@@ -119,13 +118,14 @@ Otros m\'etodos que no entran en estas dos categor\'ias son \emph{Heuristic Recu
 
 Los m\'etodos h\'ibridos, como su nombre lo indica, brindan soluciones de buena calidad de manera eficiente combinando el uso de diversos algoritmos. Surgen bajo la idea de obtener una soluci\'on inicial que luego va a ser mejorada usando otro algoritmo. Es com\'un el uso de \emph{Genetic Algorithm} (GA), \emph{Simulated Annealing} (SA) o \emph{Tabu Search} (TS) para generar la soluci\'on inicial y son normalmente usados con los algoritmos BL, BF y todas sus versiones mejoradas.
 
-GA utiliza una analog\'ia de la selecci\'on natural, a todas las posibles soluciones de un problema se le asigna un valor bas\'andose en una \emph{fitness function}~\cite{thomas2013hybrid}, lo que finalmente se utiliza para generar una secuencia de los elementos a posicionar. SA surge como una variante del m\'etodo \emph{Hill-Climbing} (HC)~\cite{hopper2001empirical}, una t\'ecnica de b\'usqueda local que se mueve entre las soluciones de un vecindario, si se encuentra una mejor soluci\'on realiza el cambio y sigue con la b\'usqueda hasta no encontrar mejoras dentro del vecindario. SA soluciona este problema aceptando soluciones de peor calidad en base a una probabilidad asociada a la diferencia de la calidad de esta soluci\'o. TS, al igual que SA, es una t\'ecnica de b\'usqueda local derivada de HC~\cite{wei2011skyline}, a la cual se le adjunta una memoria a corto plazo, para guardar las \'ultimas soluciones y evitar los ciclos entre las mismas.
+GA utiliza una analog\'ia de la selecci\'on natural, a todas las posibles soluciones de un problema se le asigna un valor bas\'andose en una \emph{fitness function}~\cite{thomas2013hybrid}, lo que finalmente se utiliza para generar una secuencia de los elementos a posicionar. SA surge como una variante del m\'etodo \emph{Hill-Climbing} (HC)~\cite{hopper2001empirical}, el cual es una t\'ecnica de b\'usqueda local que se mueve entre las soluciones de un vecindario, si se encuentra una mejor soluci\'on realiza el cambio y sigue con la b\'usqueda hasta no encontrar mejoras dentro del vecindario. SA soluciona este problema aceptando soluciones de peor calidad en base a una probabilidad asociada a la diferencia de la calidad de esta soluci\'o. TS, al igual que SA, es una t\'ecnica de b\'usqueda local derivada de HC~\cite{wei2011skyline}, a la cual se le adjunta una memoria a corto plazo, para guardar las \'ultimas soluciones y evitar los ciclos entre las mismas.
+
 
 \subsection{Comparaciones entre m\'etodos}
 
 Los resultados computacionales de los m\'etodos exactos \emph{STAIRCASE} y \emph{G-STAIRCASE}~\cite{kenmochi2009exact} en el cuadro~\ref{tab:comparacion_beng10} muestran que ambos algoritmos pueden resolver instancias de hasta 200 elementos, y la soluci\'on \'optima entregada es igual, o muy cercana, al l\'imite inferior calculado, pero entre ambos algoritmos \emph{STAIRCASE} obtiene mejores resultados agregando los elementos indicados por la columna $1 \cdot 1$, destancando los menores tiempos de ejecuci\'on.
 
-\renewcommand{\arraystretch}{1.1}
+\renewcommand{\arraystretch}{1.15}
 \begin{table}[H]
     \centering
     \begin{tabular}{|l|lllll|rr|}
@@ -256,7 +256,7 @@ Usando un plano cartesiano como referencia, se considera que el ancho de la regi
 
 \section{Representaci\'on}
 
-Para la resoluci\'on de este problema se seguir\'a la l\'ogica de la heur\'istica BL para el posicionamiento de los rect\'angulos, con el objetivo final de minimizar el \'area inutilizada, lo cual se hace minimizando la altura. Se presentan 4 representaciones en total, una se utiliza para representar los rect\'angulos, una para la posici\'on y rotaci\'on de estos rect\'angulos, una para el orden en que ser\'an posicionados y una para la regi\'on en la que se colocan estos rect\'angulos, en la cual se va construyendo la soluci\'on final.
+Para la resoluci\'on de este problema se seguir\'a la l\'ogica del m\'etodo h\'ibrido BL para el posicionamiento de los rect\'angulos, con el objetivo final de minimizar el \'area inutilizada, lo cual se hace minimizando la altura. Se presentan 4 representaciones en total, una se utiliza para representar los rect\'angulos, una para la posici\'on y rotaci\'on de estos rect\'angulos, una para el orden en que ser\'an posicionados y una para la regi\'on en la que se colocan estos rect\'angulos, en la cual se va construyendo la soluci\'on final.
 
 \subsection{Rect\'angulos}
 Los rect\'angulos se representar\'an mediante una estructura llamada \emph{Rectangle}, la cual tiene los siguientes atributos:
@@ -278,13 +278,13 @@ Las posiciones $(x,y)$ e \'indices de rotaci\'on de estos rect\'angulos se repre
 
 \subsection{Orden}
 
-Se utilizar\'a un vector de estructuras \emph{Rectangle} de tama\~no $n$, correspondiente a la cantidad de rect\'angulos, para representar el orden en que van a ser colocados estos rect\'angulos, estando en la posici\'on $i$ el $i$-\'esimo rect\'angulo que se agrega a la regi\'on.
+Se utilizar\'a un vector de estructuras \emph{Rectangle} de tama\~no $N$, correspondiente a la cantidad de rect\'angulos, para representar el orden en que van a ser colocados estos rect\'angulos, estando en la posici\'on $i$ el $i$-\'esimo rect\'angulo que se agrega a la regi\'on.
 
 La figura~\ref{fig:orden} ilustra el orden en que ser\'ian agregados 5 rect\'angulos a la regi\'on, en este ejemplo, el primer rect\'angulo que se posiciona es el rect\'angulo $R_4$, refiri\'endose al rect\'angulo con $id = 4$, mientras que el rect\'angulo $R_1$ va a ser el quinto y \'ultimo en ser posicionado.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.45\textwidth]{images/orden.eps}
+    \includegraphics[width=0.5\textwidth]{images/orden.eps}
     \caption{Ejemplo de un vector de tama\~no 5.}
     \label{fig:orden}
 \end{figure}
@@ -297,18 +297,30 @@ La regi\'on de ancho fijo y alto infinito, en la cual se deben posicionar los re
     \item Vector de estructuras \emph{Rectangle}, indicando los rect\'angulos que ya fueron posicionados en la regi\'on.
 \end{itemize}
 
-La figura~\ref{fig:region} muestra las coordenadas e \'indices de rotaci\'on que toman 3 rect\'angulos una vez que son posicionados en la regi\'on, considerando que se agregan en el orden mencionado anteriormente.
+La figura~\ref{fig:region} muestra las coordenadas e \'indices de rotaci\'on que toman 3 rect\'angulos una vez que son posicionados en la regi\'on, siguiendo el orden mencionado anteriormente.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.4\textwidth]{images/region.eps}
+    \includegraphics[width = 0.55\textwidth]{images/region.eps}
     \caption{Ejemplo del posicionamiento de 3 rect\'angulos siguiendo el orden mencionado.}
     \label{fig:region}
 \end{figure}
 
+Esta clase tambi\'en implementa funciones que ser\'an \'utiles en la construcci\'on de la soluci\'on, estas funciones son para:
+\begin{itemize}
+    \item Obtener la altura de la regi\'on.
+    \item Obtener el \'area inutilizada de la regi\'on, correspondiente a la funci\'on de evaluaci\'on.
+    \item Agregar un rect\'angulo usando una t\'ecnica \emph{greedy}.
+    \item Revisar si se puede posicionar un rect\'angulo en una posici\'on dada.
+    \item Mejorar la soluci\'on encontrada aplicando una versi\'on de HC.
+    \item Obtener las posiciones disponibles, inutilizadas.
+    \item Ordenar los rect\'angulos seg\'un su id.
+    \item Mostrar la soluci\'on encontrada.
+\end{itemize}
+
 \section{Descripci\'on del Algoritmo}
 
-El algoritmo propuesto para la resoluci\'on del 2DSPP utiliza una t\'ecnica \emph{greedy} para generar una soluci\'on inicial, la cual sigue la l\'ogica de la heur\'istica BL. Se genera esta primera soluci\'on con la intenci\'on de mejorarla usando la t\'ecnica \emph{Hill-Climbing First Improvement} (HC-FI), esta t\'ecnica itera generando un vecindario aplicando un \emph{movimiento}, si encuentra alg\'un vecino con una soluci\'on mejor, este reemplazar\'a a la soluci\'on actual y seguir\'a con su b\'usqueda hasta no encontrar mejoras o realizar una cantidad de iteraciones determinadas, es decir, aplicando un criterio de t\'ermino.
+El algoritmo propuesto para la resoluci\'on del 2DSPP utiliza una t\'ecnica \emph{greedy} para generar una soluci\'on inicial, la cual sigue la l\'ogica de BL. Se genera esta primera soluci\'on con la intenci\'on de mejorarla usando la t\'ecnica \emph{Hill-Climbing First Improvement} (HC-FI), esta t\'ecnica itera generando un vecindario aplicando un \emph{movimiento}, si encuentra alg\'un vecino con una soluci\'on mejor, este reemplazar\'a a la soluci\'on actual y seguir\'a con su b\'usqueda hasta no encontrar mejoras o realizar una cantidad de iteraciones determinadas, es decir, aplicando un criterio de t\'ermino.
 
 El \emph{movimiento} que se aplica, utilizando las representaciones mencionadas anteriormente, es el reposicionamiento del \'ultimo rect\'angulo que fue agregado a la regi\'on en algunos de los espacios inutilizados. Se itera seleccionando los rect\'angulos de manera descendente debido a la estrategia \emph{greedy} implementada, en la t\'ecnica BL los \'ultimos rect\'angulos en ser posicionados quedar\'an sobre, o la derecha, de los rect\'angulos posicionados con anterioridad, esto implica que estos \'ultimos tienen una mayor probabilidad de aumentar la altura de la regi\'on.
 
@@ -318,7 +330,7 @@ Se utiliza la heur\'istica BL para posicionar los rect\'angulos lo m\'as abajo y
 \vspace{0.2cm}
 
 \begin{algorithm}[H]
-\caption{\emph{Greedy} implementado usando la heur\'istica BL.}
+\caption{\emph{Greedy} implementado usando la t\'ecnica BL}
 \label{alg:greedy}
 
 \SetNoFillComment 
@@ -362,13 +374,13 @@ El algoritmo~\ref{alg:greedy} utiliza una funci\'on auxiliar \emph{sePuedePosici
 
 \subsection{Implementaci\'on de \emph{Hill-Climibing First Improvement}}
 
-Se pueden identificar dos versiones de la heur\'istica HC, \emph{First Improvement} (FI) o \emph{Best Improvement} (BI), dependiendo de la forma en la que recorre el vecindario y selecciona al mejor vecino. La diferencia entre HC-BI y HC-FI es que el primero revisa todo el vecindario y selecciona el mejor vecino de todos, en cambio, el segundo selecciona el primer vecino mejor que encuentra.
+Se pueden identificar dos versiones del m\'etodo h\'ibrido HC, \emph{First Improvement} (FI) o \emph{Best Improvement} (BI), dependiendo de la forma en la que recorre el vecindario y selecciona al mejor vecino. La diferencia entre HC-BI y HC-FI es que el primero revisa todo el vecindario y selecciona el mejor vecino de todos, en cambio, el segundo selecciona el primer vecino mejor que encuentra.
 
-Se \'a HC-FI para mejorar la soluci\'on inicial utilizando el movimiento antes mencionado, se itera sobre todos los rect\'angulos posicionados de manera descendente, revisa los espacios inutilizados con el objetivo de encontrar alguna posici\'on con la que se mejore la altura y, a su vez, el \'area inutilizada. El tama\~no del vecindario que se genera es igual a la cantidad de espacios inutilizados, el \'area inutilizada, y en el peor caso HC-FI revisar\'a el vecindario completo antes de iterar sobre el rect\'angulo siguiente o terminar su ejecuci\'on.
+Se implementar\'a HC-FI para mejorar la soluci\'on inicial utilizando el movimiento antes mencionado, se itera sobre todos los rect\'angulos posicionados de manera descendente, revisa los espacios inutilizados con el objetivo de encontrar alguna posici\'on con la que se mejore la altura y, a su vez, el \'area sin usar. El tama\~no del vecindario que se genera es igual a la cantidad de espacios inutilizados, correspondiente al \'area inutilizada, y en el peor caso HC-FI revisar\'a el vecindario completo antes de iterar sobre el rect\'angulo siguiente o terminar su ejecuci\'on.
 \vspace{0.2cm}
 
 \begin{algorithm}[H]
-\caption{HC-FI implementado.}
+\caption{HC-FI implementado}
 \label{alg:hillclimbing}
 
 \SetNoFillComment 
@@ -427,50 +439,148 @@ El algoritmo~\ref{alg:hillclimbing} se compone de dos ciclos principales, el pri
 \vspace{0.2cm}
 
 \begin{algorithm}[H]
-    \caption{Funci\'on de evaluaci\'on \emph{obtenerAreaInutilizada()}.}
-    \label{alg:funcionevaluacion}
+\caption{Funci\'on de evaluaci\'on \emph{obtenerAreaInutilizada()}}
+\label{alg:funcionevaluacion}
 
-    \SetNoFillComment 
+\SetNoFillComment 
 
-    % Cambia el nombre a procedure
-    \SetKwProg{Fn}{Procedure}{}{end}
-    \SetKwFunction{evaluacion}{evaluationFunction}
+% Cambia el nombre a procedure
+\SetKwProg{Fn}{Procedure}{}{end}
+\SetKwFunction{evaluacion}{evaluationFunction}
 
-    % Inputs y outputs
-    \KwResult{Calcula el \'area inutilizada de la regi\'on}
-    \KwData{$anchoRegion, \: altoRegion$}
+% Inputs y outputs
+\KwResult{Calcula el \'area inutilizada de la regi\'on}
+\KwData{$anchoRegion, \: altoRegion$}
 
-    \Fn{\evaluacion{rectangulosYaPosicionados}}{
-    $areaTotal \leftarrow anchoRegion * altoRegion$\;
-    $areaRectangulos \leftarrow 0$\;
+\Fn{\evaluacion{rectangulosYaPosicionados}}{
+$areaTotal \leftarrow anchoRegion * altoRegion$\;
+$areaRectangulos \leftarrow 0$\;
 
-    \ForEach{rectangulo $\in$ rectangulosYaPosicionados}{
-        $areaRectangulo \leftarrow \text{ancho de } rectangulo * \text{alto de } rectangulo$\;
-        $areaRectangulos \leftarrow areaRectangulos + areaRectangulo$\;
-    }
-    \KwRet{areaTotal $-$ areaRectangulos}\;
-    }
+\ForEach{rectangulo $\in$ rectangulosYaPosicionados}{
+    $areaRectangulo \leftarrow \text{ancho de } rectangulo * \text{alto de } rectangulo$\;
+    $areaRectangulos \leftarrow areaRectangulos + areaRectangulo$\;
+}
+\KwRet{areaTotal $-$ areaRectangulos}\;
+}
 \end{algorithm}
 
 \section{Experimentos}
 
-Se necesita saber c\'omo experimentaron, c\'omo definieron par\'ametros, 
-c\'omo los fueron modificando, cu\'ales problemas/instancias se estudiaron y por qu\'e, etc. Recuerde que las t\'ecnicas completas son deterministas y las t\'ecnicas incompletas son estoc\'asticas.
+Se van a realizar dos tipos de experimentos, el primero con instancias ya conocidas descritas en el cuadro~\ref{tab:conocidas}, estas soluciones encontradas son referente a la variante OF, que no permite las rotaciones, pero se saben los tiempos de ejecuci\'on de los m\'etodo exactos \emph{STAIRCASE} y \emph{G-STAIRCASE} mencionados en el cuadro~\ref{tab:comparacion_beng10}, para comparar la eficiencia de esta propuesta. Mientras que en el cuadro~\ref{tab:pruebas} se presentan instancias de prueba desconocidas~\cite{carpetaInstancias2023}, seleccionando 7 de cada grupo con sus caracter\'isticas respectivas.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|lll|}
+\hline
+Instancia & $N$ & $W$ & $H_{opt}$ \\ \hline
+beng01 & 20 & 25 & 30 \\ \hline
+beng02 & 40 & 25 & 57 \\ \hline
+beng03 & 60 & 25 & 84 \\ \hline
+beng04 & 80 & 25 & 107 \\ \hline
+beng05 & 100 & 25 & 134 \\ \hline
+beng06 & 40 & 40 & 36 \\ \hline
+beng07 & 80 & 40 & 67 \\ \hline
+beng08 & 120 & 40 & 101 \\ \hline
+beng09 & 160 & 40 & 126 \\ \hline
+beng10 & 200 & 40 & 156 \\ \hline
+\end{tabular}
+\caption{Instancias conocidas de 20 a 200 rect\'angulos.}
+\label{tab:conocidas}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|lllllll|lllllll|}
+\hline
+Grupo & \multicolumn{7}{l|}{2-5} & \multicolumn{7}{l|}{6-10} \\ \hline
+Instancia & 1 & 5 & 10 & 15 & 20 & 25 & 30 & 1 & 5 & 10 & 15 & 20 & 25 & 30 \\ \hline
+$N$ & 5 & 3 & 5 & 2 & 3 & 2 & 4 & 6 & 8 & 9 & 8 & 9 & 6 & 8 \\ \hline
+$W$ & 19 & 19 & 12 & 15 & 19 & 15 & 15 & 13 & 13 & 11 & 15 & 20 & 16 & 11 \\ \hline
+Grupo & \multicolumn{7}{l|}{11-15} & \multicolumn{7}{l|}{16-20} \\ \hline
+Instancia & 1 & 5 & 10 & 15 & 20 & 25 & 30 & 1 & 5 & 10 & 15 & 20 & 25 & 30 \\ \hline
+$N$ & 11 & 11 & 12 & 12 & 13 & 14 & 11 & 17 & 16 & 18 & 19 & 17 & 16 & 16 \\ \hline
+$W$ & 20 & 10 & 11 & 15 & 10 & 19 & 15 & 16 & 20 & 20 & 16 & 10 & 20 & 16 \\ \hline
+\end{tabular}
+\caption{Instancias de prueba de 2 a 20 rect\'angulos.}
+\label{tab:pruebas}
+\end{table}
+
+Debido a la naturaleza estoc\'astica de los algoritmos implementados, se ejecutar\'a 5 veces cada instancia, utilizando semillas distintas en cada una para posicionar los rect\'angulos en distinto orden, y se calcular\'a el promedio entre esas soluciones encontradas. Todos estos experimentos se ejecutaron en un notebook con procesador AMD Ryzen 7 3750H con frecuencia 2,3[GHz].
 
 \section{Resultados}
 
-Qu\'e fue lo que se logr\'o con la experimentaci\'on, incluir tablas y gr\'aficos (lo m\'as explicativos posible). Los resultados deben ser comentados y justificados en detalle en esta secci\'on.
+\subsection{Instancias conocidas}
+
+Los resultados de las instancias conocidas se presentan en el cuadro~\ref{tab:resultados_conocidas}, mostrando la siguiente informaci\'on:
+\begin{itemize}
+    \item $H_{greedy}$: altura de la soluci\'on inicial generada con el m\'etodo \emph{greedy} utilizando BL.
+    \item $H_{HC-FI}$: altura de la soluci\'on final luego de haber implementado el m\'etodo h\'ibrido HC-FI.
+    \item $\Delta H$: diferencia entre la altura final promedio, luego de HC-FI, y la menor altura final entre las 5 ejecuciones.
+    \item $t$: tiempo de ejecuci\'on del algoritmo medido en segundos [s].
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|rrrr|}
+\hline
+Instancia & $H_{greedy}$ & $H_{HC-FI}$ & $\Delta H$ & $t$ \\ \hline
+beng01 & 42 & 41 & 3 & \textbf{0.017} \\ \hline
+beng02 & 76 & 73 & 3 & \textbf{0.029} \\ \hline
+beng03 & 108 & 108 & 4 & \textbf{0.042} \\ \hline
+beng04 & 134 & 134 & 2 & \textbf{0.048} \\ \hline
+beng05 & 171 & 171 & 5 & \textbf{0.076} \\ \hline
+beng06 & 43 & 43 & 1 & \textbf{0.027} \\ \hline
+beng07 & 81 & 81 & 2 & \textbf{0.046} \\ \hline
+beng08 & 117 & 117 & 2 & \textbf{0.098} \\ \hline
+beng09 & 150 & 150 & 3 & \textbf{0.086} \\ \hline
+beng10 & 187 & 187 & 4 & 0.207 \\ \hline
+\end{tabular}
+\caption{Resultados promedio de las instancias conocidas luego de 5 ejecuciones.}
+\label{tab:resultados_conocidas}
+\end{table}
+
+Se destacan las soluciones que son mejoradas aplicando HC-FI, correspondientes a las instancias \emph{beng01} y \emph{beng02}, pero a\'un as\'i se puede evidenciar que este algoritmo no obtiene los mismos resultados que en el cuadro~\ref{tab:comparacion_beng10}. Esto se puede deber a la forma en las que se implement\'o este m\'etodo h\'ibrido en el algoritmo, el cual tiene un enfoque en recorrer su vecindario mejorando la soluci\'on actual, en vez de explorar otras regiones del espacio de b\'usqueda que puedan llevar al \'optimo global. Por lo cual, es posible notar que estos m\'etodos entregan como soluci\'on un \'optimo local, o una soluci\'on muy cercana a este, quedando estancado en este \'optimo.
+
+Comparando los tiempos de ejecuci\'on promedio con el de los m\'etodos h\'ibridos, se destacan las instancias en que se obtuvo un mejor tiempo de ejecuci\'on, siendo la instancia \textit{beng10} la \'unica con peor tiempo. Si se considera lo mencionado anteriormente respecto a los \'optimos locales, estos mejores tiempos se pueden deber al t\'ermino de ejecuci\'on temprano del algoritmo HC-FI, dado que en la mayor\'ia de estas pruebas, este termina su ejecuci\'on luego de iterar sobre un solo rect\'angulo, el \'ultimo en ser posicionado.
+
+\subsection{Instancias de prueba desconocidas}
+
+Los resultados de las instancias de prueba desconocidas se presentan en el cuadro~\ref{tab:resultados_pruebas}, el cual muestra la misma informaci\'on mencionada en las instancias conocidas, exceptuando el tiempo de ejecuci\'on.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|rrrrrrr|rrrrrrr|}
+\hline
+Grupo & \multicolumn{7}{l|}{2-5} & \multicolumn{7}{l|}{6-10} \\ \hline
+Instancia & \multicolumn{1}{l}{1} & \multicolumn{1}{l}{5} & \multicolumn{1}{l}{10} & \multicolumn{1}{l}{15} & \multicolumn{1}{l}{20} & \multicolumn{1}{l}{25} & \multicolumn{1}{l|}{30} & \multicolumn{1}{l}{1} & \multicolumn{1}{l}{5} & \multicolumn{1}{l}{10} & \multicolumn{1}{l}{15} & \multicolumn{1}{l}{20} & \multicolumn{1}{l}{25} & \multicolumn{1}{l|}{30} \\ \hline
+$H_{greedy}$ & 10 & 5 & 23 & 5 & 9 & 2 & 10 & 30 & \textbf{20} & 37 & \textbf{16} & \textbf{18} & 7 & 17 \\ \hline
+$H_{HC-FI}$ & 10 & 5 & 23 & 5 & 9 & 2 & 10 & 30 & \textbf{19} & 37 & \textbf{15} & \textbf{17} & 7 & 17 \\ \hline
+$\Delta H$ & 1 & 1 & 2 & 0 & 0 & 0 & 1 & 2 & 2 & 0 & 3 & 1 & 1 & 2 \\ \hline
+Grupo & \multicolumn{7}{l|}{11-15} & \multicolumn{7}{l|}{16-20} \\ \hline
+Instancia & \multicolumn{1}{l}{1} & \multicolumn{1}{l}{5} & \multicolumn{1}{l}{10} & \multicolumn{1}{l}{15} & \multicolumn{1}{l}{20} & \multicolumn{1}{l}{25} & \multicolumn{1}{l|}{30} & \multicolumn{1}{l}{1} & \multicolumn{1}{l}{5} & \multicolumn{1}{l}{10} & \multicolumn{1}{l}{15} & \multicolumn{1}{l}{20} & \multicolumn{1}{l}{25} & \multicolumn{1}{l|}{30} \\ \hline
+$H_{greedy}$ & 22 & \textbf{33} & 30 & \textbf{50} & 53 & \textbf{23} & 26 & \textbf{31} & 24 & \textbf{33} & \textbf{41} & \textbf{52} & 22 & \textbf{45} \\ \hline
+$H_{HC-FI}$ & 22 & \textbf{32} & 30 & \textbf{47} & 53 & \textbf{22} & 26 & \textbf{30} & 24 & \textbf{32} & \textbf{40} & \textbf{50} & 22 & \textbf{41} \\ \hline
+
+$\Delta H$ & 2 & 3 & 1 & 2 & 5 & 4 & 1 & 3 & 3 & 2 & 2 & 3 & 2 & 6 \\ \hline
+\end{tabular}
+\caption{Resultados promedio de las instancias de prueba luego de 5 ejecuciones.}
+\label{tab:resultados_pruebas}
+\end{table}
+
+No se puede hacer un an\'alisis comparativo respecto a la calidad de la soluci\'on encontrada, debido a que no se tiene informaci\'on previa de estas instancias, pero se pueden comparar entre s\'i.
+En el grupo de \emph{Instancias 2-5} se tienen resultados consistentes entre las 5 ejecuciones, obteniendo los mismos resultados en las instancias \emph{15}, \emph{20} y \emph{25}, y obteniendo la mayor diferencia con el promedio en la instancia \emph{10}. Es posible deducir que la soluci\'on inicial entregada corresponde a un \'optimo, local o global, ya que no existen mejoras al aplicar HC-FI.
+
+Mientras que los grupos de \emph{Instancias 11-15} y \emph{16-20} se encuentran las mayores diferencias con el promedio, teniendo la mayor diferencia en la instancia \emph{30} del grupo \emph{16-20}. Esto se puede explicar debido a la cantidad de rect\'angulos que se deben posicionar, considerando que hay $N$ rect\'angulos, se tendr\'a como m\'aximo $N!$ posibles formas en que se agregan a la regi\'on, esto es equivalente a decir que pueden existir hasta $N!$ soluciones diferentes. Por lo que al tener una mayor cantidad de rect\'angulos es m\'as probable que las soluciones sean distintas.
+
+Esto concuerda con los resultados obtenidos, una instancia con 2 rect\'angulos tiene como m\'aximo $2!$ posibles soluciones, cada una con una probabilidad de $\frac{1}{2!}$ de obtenerse, mientras que una instancia con 20 rect\'angulos tiene hasta $20!$ posibles soluciones, y cada una con una probabilidad de $\frac{1}{20!}$ de obtenerse.
 
 \section{Conclusiones}
 
-Conclusiones RELEVANTES del estudio realizado. Incluir conclusiones acerca de la adecuaci\'on de la propuesta de soluci\'on al problema que se busca resolver. Listar y analizar ventajas y desventajas de la propuesta en base a los resultados obtenidos y comportamiento de la propuesta en diferentes escenarios (problemas/instancias/par\'ametros). Incluir trabajo futuro en base a las conclusiones.
-\vspace{0.2cm}
+El \emph{2D Strip Packing Problem} es un problema con diversas aplicaciones pr\'acticas reales, por lo cual es importante buscar soluciones buenas y eficientes para instancias de mayor tama\~no y complejidad, ya que estas son las que m\'as se asemejan a sus aplicaciones reales. Existen diversas t\'ecnicas enfocadas en las distintas variantes que existen, las restricciones que debe cumplir cada uno de estos m\'etodos depende de la variante de estudio, considerando algunas m\'as sencillas que otras. Los m\'etodos heur\'isticos e h\'ibridos son los m\'as favorables, dado que logran resolver las instancias m\'as parecidas a la realidad, pero a\'un no pueden obtener la soluci\'on \'optima para estas instancias m\'as complejas.
 
-El \emph{2D Strip Packing Problem} es un problema con diversas aplicaciones pr\'acticas reales, por lo cual es importante buscar soluciones buenas y eficientes para instancias de mayor tama\~no y complejidad, ya que estas son las que m\'as se asemejan a sus aplicaciones reales. Existen diversas t\'ecnicas enfocadas en las distintas variantes que existen, las restricciones que debe cumplir cada uno de estos m\'etodos depende de la variante de estudio, considerando algunas m\'as sencillas que otras. Los m\'etodos heur\'isticos e h\'ibridos son los m\'as favorables, dado que logran resolver las instancias m\'as parecidas a la realidad, pero a\'un no pueden obtener la soluci\'on \'optima para estas instancias m\'as complejas. Las investigaciones recientes respecto al problema est\'an enfocadas en estos m\'etodos y uno de los posibles trabajos a realizar en un futuro es crear nuevos m\'etodos h\'ibridos con las nuevas t\'ecnicas heur\'isticas m\'as competitivas hasta la fecha. 
+Las investigaciones recientes respecto al problema est\'an enfocadas en estos m\'etodos y en la creaci\'on de nuevos m\'etodos h\'ibridos con las nuevas t\'ecnicas heur\'isticas m\'as competitivas hasta la fecha, en este informe se propuso un algoritmo que implementa los m\'etodos BL y HC. Comparando los resultados obtenidos con resultados de investigaciones anteriores, se observa que el algoritmo propuesto tiene potencial para obtener mejores soluciones. Su principal ventaja es el tiempo de ejecuci\'on y consistencia en las soluciones encontradas, lo que se debe a la t\'ecnica \emph{greedy} y b\'usqueda local que realiza, que tambi\'en son sus principales desventajas. La t\'ecnica \emph{greedy} implementada con BL es simple y eficiente, pero al combinarla con un algoritmo de b\'usqueda local como HC lo hace m\'as probable a quedar estancado en un \'optimo local, que en instancias de tama\~no elevado puede alejarse significativamente del \'optimo global. Como trabajo a futuro se puede implementar una t\'ecnica \emph{greedy} diferente en conjunto a un algoritmo que permita la b\'usqueda en otras regiones del espacio de b\'usqueda, como TS, SA o GA. Tambi\'en, se deben realizar una mayor cantidad de pruebas, con una mayor cantidad de instancias, incluyendo instancias de mayor tama\~no que dar\'an informaci\'on relevante sobre las mejoras necesarias que implementar.
 
 \bibliographystyle{plain}
 \bibliography{Referencias}
 
-\end{document} 
-
-
+\end{document}

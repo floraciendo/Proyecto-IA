@@ -13,8 +13,8 @@ Especificación de archivos:
     makefile:
         Ejecuta y compila el código.
     Informe:
-        Carpeta con los archivos relacionados al informe, los cuales son RamirezF202073522.tex, Referencias.bib, Makefile y
-        RamirezF202073522.pdf.
+        Carpeta con los archivos relacionados al informe, los cuales son RamirezF202073522.tex, Referencias.bib, carpeta
+        images con archivos de tipo .eps, Makefile y RamirezF202073522.pdf.
 
 ☆.。.:*・°☆.。.:*・°☆.。.:*・°☆.。.:*・°☆.。.:*・°☆
     
